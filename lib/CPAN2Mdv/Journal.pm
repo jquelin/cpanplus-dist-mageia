@@ -38,7 +38,8 @@ sub _onpub_log {
     my $time = $now->hms;
 
     # from
-    my $from = $sender->ID;
+    my $id   = $sender->ID;
+    my $from = exists $h->{alias}{$id} ? $h->{alias}{$id} : $id;
 
     # log
     print "$date $time [$from] @what";
@@ -49,10 +50,17 @@ sub _onpub_log {
 # private events
 
 sub _onpriv_start {
-    my ($k, $h, $args) = @_[KERNEL, HEAP, ARG0];
+    my ($k, $h, $session, $args) = @_[KERNEL, HEAP, SESSION, ARG0];
+
+    # store session names.
+    $h->{alias} = {
+        $args->{main} => 'main',
+        $session->ID  => 'journal',
+    };
+
     #my $h->{format} = DateTime::Format::Strptime->new( '%b-%d %T' );
 
-    $k->yield('log', "journal has started\n");
+    $k->yield('log', "start complete\n");
 }
 
 #--
