@@ -30,13 +30,18 @@ sub spawn {
 # public events
 
 sub _onpub_log {
-    my ($k, $h, @what) = @_[KERNEL, HEAP, ARG0..$#_];
+    my ($k, $h, $sender, @what) = @_[KERNEL, HEAP, SENDER, ARG0..$#_];
 
+    # timestamp
     my $now  = DateTime->now( time_zone=>'local' );
     my $date = $now->month_abbr . '-' . $now->day;
     my $time = $now->hms;
 
-    print "$date $time @what";
+    # from
+    my $from = $sender->ID;
+
+    # log
+    print "$date $time [$from] @what";
 }
 
 
