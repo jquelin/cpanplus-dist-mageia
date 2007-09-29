@@ -16,9 +16,9 @@ sub spawn {
     my $session = POE::Session->create(
         args          => [ $args ],
         inline_states => {
-            '_start'    => \&_onpriv_start,
-            'ident'     => \&_onpub_ident,
-            'log'       => \&_onpub_log,
+            _start    => \&_onpriv_start,
+            ident     => \&_onpub_ident,
+            log       => \&_onpub_log,
         },
     );
     return $session->ID;
