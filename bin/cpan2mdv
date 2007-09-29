@@ -1,0 +1,141 @@
+#!/usr/bin/perl
+#
+#
+
+use strict;
+use warnings;
+
+use FindBin qw[ $Bin ];
+use lib "$Bin/../lib"; #  if not installed.
+
+use Config::Tiny;
+use CPAN2Mdv::Journal;
+use Getopt::Euclid;
+use POE;
+
+
+# read central configuration.
+my $conf = Config::Tiny->read( $ARGV{-config} );
+die "Couldn't find a suitable configuration file.\n(Try: $0 --help)\n"
+    unless defined $conf;
+
+
+# create main session.
+POE::Session->create(
+    inline_states => {
+        _start      => \&_onpriv_start,
+        rendezvous => \&_onpub_rendezvous,
+    }
+);
+
+POE::Kernel->run();
+exit;
+
+
+#--
+# public events
+
+sub _onpub_rendezvous {
+    my ($k, $h, $sender) = @_[KERNEL, HEAP, SENDER];
+
+    # check sender and log rendezvous.
+    my $id   = $sender->ID;
+    my $from = $h->{alias}{$id};
+    $k->post( 'journal', 'log', "rendezvous with $from\n" );
+
+    # if rdv with journal, then launch other sessions.
+    if ( $h->{alias}{$id} eq 'journal' ) {
+
+    }
+}
+
+
+#--
+# private events
+
+sub _onpriv_start {
+    my ($k, $h, $session) = @_[KERNEL, HEAP, SESSION];
+
+    # launch journal.
+    my $jid = CPAN2Mdv::Journal->spawn( { main => $session->ID } );
+
+    # store map of ids / aliases.
+    $h->{alias} = {
+        $session->ID => 'main',
+        $jid         => 'journal',
+    };
+}
+
+
+#
+# resolve distrib (audio::mpd::collection -> audio-mpd)
+#    v
+# resolve to tarball (including version)
+#    v
+# download tarball
+#    v
+# resolve rpm name
+#    v
+# create spec file
+#    v
+# build rpm               > report error, reschedule
+#    v
+# install rpm             > report error
+#    v
+# upload rpm to mdv
+#
+#
+# journal
+# cpan rss listener
+# cpan walker / mdv
+#
+
+
+__END__
+
+=head1 NAME
+
+cpan2mdv - rpm generator from cpan
+
+
+=head1 USAGE
+
+    cpan2mdv [-c <file>]
+
+
+=head1 VERSION
+
+This documentation refers to cpan2mdv version 0.0.1
+
+
+=head1 OPTIONS
+
+=over
+
+=item -c[onfig] [=] <file>
+
+Specify alternate configuration file. Defaults in order to
+C</etc/cpan2mdv.conf>, or C<../etc/cpan2mdv.conf>.
+
+=for Euclid:
+    file.type:      readable
+    file.default:   -e '/etc/cpan2mdv.conf' ? '/etc/cpan2mdv.conf' : "$FindBin::Bin/../etc/cpan2mdv.conf"
+
+=item --version
+
+=item --usage
+
+=item --help
+
+=item --man
+
+Print the usual program information.
+
+
+=back
+
+
+
+=cut
+
+
