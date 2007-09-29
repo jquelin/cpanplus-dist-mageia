@@ -9,6 +9,7 @@ use FindBin qw[ $Bin ];
 use lib "$Bin/../lib"; #  if not installed.
 
 use Config::Tiny;
+use CPAN2Mdv::Collector;
 use CPAN2Mdv::Journal;
 use CPAN2Mdv::Resolver;
 use Getopt::Euclid;
@@ -43,15 +44,16 @@ sub _onpub_rendezvous {
     if ( $from eq 'journal' ) {
         $k->post( 'journal', 'ident', 'main' );
         CPAN2Mdv::Resolver->spawn($conf);
+        CPAN2Mdv::Collector->spawn($conf);
 
-        my %waitfor; @waitfor{ qw[ resolver ] } = ();
+        my %waitfor; @waitfor{ qw[ collector resolver ] } = ();
         $h->{waitfor} = \%waitfor;
     }
 
     # check if we're waiting for other sessions.
     delete $h->{waitfor}{$from};
     my @waitfor   = sort keys %{ $h->{waitfor} };
-    my $remaining = scalar @waitfor ? "(@waitfor remaining)" : '';
+    my $remaining = scalar @waitfor ? "(remaining: @waitfor)" : '';
     $k->post( 'journal', 'log', "rendezvous with $from $remaining\n" ); # log rdv
     return if scalar @waitfor;
 
