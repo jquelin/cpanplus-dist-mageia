@@ -36,16 +36,13 @@ exit;
 # public events
 
 sub _onpub_rendezvous {
-    my ($k, $h, $sender) = @_[KERNEL, HEAP, SENDER];
-
-    # check sender and log rendezvous.
-    my $id   = $sender->ID;
-    my $from = $h->{alias}{$id};
-    $k->post( 'journal', 'log', "rendezvous with $from\n" );
+    my ($k, $h, $from) = @_[KERNEL, HEAP, ARG0];
 
     # if rdv with journal, then launch other sessions.
-    if ( $h->{alias}{$id} eq 'journal' ) {
+    if ( $from eq 'journal' ) {
     }
+
+    $k->post( 'journal', 'log', "rendezvous with $from\n" ); # log rdv
 }
 
 
@@ -53,18 +50,10 @@ sub _onpub_rendezvous {
 # private events
 
 sub _onpriv_start {
-    my ($k, $h, $session) = @_[KERNEL, HEAP, SESSION];
+    my ($k, $session) = @_[KERNEL, SESSION];
 
     $k->alias_set( 'main' );
-
-    # launch journal.
-    my $jid = CPAN2Mdv::Journal->spawn( { main => $session->ID } );
-
-    # store map of ids / aliases.
-    $h->{alias} = {
-        $session->ID => 'main',
-        $jid         => 'journal',
-    };
+    CPAN2Mdv::Journal->spawn( { main => $session->ID } );
 }
 
 
