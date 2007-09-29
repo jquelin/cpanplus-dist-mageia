@@ -16,9 +16,8 @@ sub spawn {
     my $session = POE::Session->create(
         args          => [ $args ],
         inline_states => {
-            # private events
             '_start'    => \&_onpriv_start,
-            # public events
+            'ident'     => \&_onpub_ident,
             'log'       => \&_onpub_log,
         },
     );
@@ -28,6 +27,11 @@ sub spawn {
 
 #--
 # public events
+
+sub _onpub_ident {
+    my ($h, $sender, $alias) = @_[HEAP, SENDER, ARG0];
+    $h->{alias}{ $sender->ID } = $alias;
+}
 
 sub _onpub_log {
     my ($k, $h, $sender, @what) = @_[KERNEL, HEAP, SENDER, ARG0..$#_];
@@ -50,21 +54,16 @@ sub _onpub_log {
 # private events
 
 sub _onpriv_start {
-    my ($k, $h, $session, $args) = @_[KERNEL, HEAP, SESSION, ARG0];
+    my ($k, $h, $args) = @_[KERNEL, HEAP, ARG0];
     my $alias = 'journal';
 
     $k->alias_set( $alias );
 
-    # store session names.
-    $h->{alias} = {
-        $args->{main} => 'main',
-        $session->ID  => $alias,
-    };
-
     #my $h->{format} = DateTime::Format::Strptime->new( '%b-%d %T' );
 
-    $k->post ( 'main', 'rendezvous', $alias );    # signal main that we're started
-    $k->yield( 'log',  "start complete\n" );      # logging
+    $k->yield( 'ident', $alias );               # register to journal
+    $k->post ( 'main', 'rendezvous', $alias );  # signal main that we're started
+    $k->yield( 'log',  "start complete\n" );    # logging
 }
 
 #--
