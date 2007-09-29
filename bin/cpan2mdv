@@ -9,6 +9,7 @@ use FindBin qw[ $Bin ];
 use lib "$Bin/../lib"; #  if not installed.
 
 use Config::Tiny;
+use CPAN2Mdv::DistFinder;
 use CPAN2Mdv::Journal;
 use Getopt::Euclid;
 use POE;
@@ -41,6 +42,7 @@ sub _onpub_rendezvous {
     # if rdv with journal, then launch other sessions.
     if ( $from eq 'journal' ) {
         $k->post( 'journal', 'ident', 'main' );
+        CPAN2Mdv::DistFinder->spawn($conf);
     }
 
     $k->post( 'journal', 'log', "rendezvous with $from\n" ); # log rdv
