@@ -36,8 +36,22 @@ sub _onpub_task {
     my ($k, $h, $dist) = @_[KERNEL, HEAP, ARG0];
 
     my $url = $dist->url;
+    $k->post( 'journal', 'log', "task: $url\n" );
+
     my $basename = basename($url);
     my $path = "$ENV{HOME}/rpm/SOURCES/$basename";
+    $dist->path($path);
+
+    if ( -r $path ) {
+        # file already exists
+        $k->post( 'journal', 'log', "task: $path\n" );
+        return;
+    }
+
+    # download
+    # FIXME: poco-c-http
+    system( "curl --silent --location --output $path $url" );
+    $k->post( 'journal', 'log', "task: $path\n" );
 }
 
 
