@@ -43,9 +43,17 @@ sub _onpub_rendezvous {
     if ( $from eq 'journal' ) {
         $k->post( 'journal', 'ident', 'main' );
         CPAN2Mdv::DistFinder->spawn($conf);
+
+        my %waitfor; @waitfor{ qw[ distfinder ] } = ();
+        $h->{waitfor} = \%waitfor;
     }
 
-    $k->post( 'journal', 'log', "rendezvous with $from\n" ); # log rdv
+    # check if we're waiting for other sessions.
+    delete $h->{waitfor}{$from};
+    my @waitfor   = sort keys %{ $h->{waitfor} };
+    my $remaining = scalar @waitfor ? "(@waitfor remaining)" : '';
+    $k->post( 'journal', 'log', "rendezvous with $from $remaining\n" ); # log rdv
+    return if scalar @waitfor;
 }
 
 
