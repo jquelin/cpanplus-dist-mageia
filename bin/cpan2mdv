@@ -11,6 +11,7 @@ use lib "$Bin/../lib"; #  if not installed.
 use Config::Tiny;
 use CPAN2Mdv::Collector;
 use CPAN2Mdv::Dist;
+use CPAN2Mdv::Downloader;
 use CPAN2Mdv::Journal;
 use CPAN2Mdv::Resolver;
 use Getopt::Euclid;
@@ -48,8 +49,9 @@ sub _onpub_rendezvous {
         $k->post( 'journal', 'ident', 'main' );
         CPAN2Mdv::Resolver->spawn($conf);
         CPAN2Mdv::Collector->spawn($conf);
+        CPAN2Mdv::Downloader->spawn($conf);
 
-        my %waitfor; @waitfor{ qw[ collector resolver ] } = ();
+        my %waitfor; @waitfor{ qw[ resolver collector downloader ] } = ();
         $h->{waitfor} = \%waitfor;
     }
 
