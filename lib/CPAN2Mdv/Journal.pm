@@ -62,8 +62,8 @@ sub _onpriv_start {
 
     #my $h->{format} = DateTime::Format::Strptime->new( '%b-%d %T' );
 
-    $k->post ( $args->{main}, 'rendezvous' ); # signal main that we're started
-    $k->yield( 'log', "start complete\n" );   # logging
+    $k->post ( 'main', 'rendezvous' );         # signal main that we're started
+    $k->yield( 'log',  "start complete\n" );   # logging
 }
 
 #--
