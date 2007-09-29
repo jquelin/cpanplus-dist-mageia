@@ -4,7 +4,7 @@
 
 package CPAN2Mdv::Downloader;
 
-use HTML::TreeBuilder;
+use File::Basename;
 use POE;
 
 
@@ -30,6 +30,11 @@ sub spawn {
 #
 
 sub _onpub_task {
+    my ($k, $h, $dist) = @_[KERNEL, HEAP, ARG0];
+
+    my $url = $dist->url;
+    my $basename = basename($url);
+    my $path = "$ENV{HOME}/rpm/SOURCES/$basename";
 }
 
 
