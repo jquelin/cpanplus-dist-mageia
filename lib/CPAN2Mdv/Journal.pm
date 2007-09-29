@@ -59,6 +59,7 @@ sub _onpriv_start {
 
     $k->alias_set( $alias );
 
+    # FIXME: include format for easier timestamping.
     #my $h->{format} = DateTime::Format::Strptime->new( '%b-%d %T' );
 
     $k->yield( 'ident', $alias );               # register to journal

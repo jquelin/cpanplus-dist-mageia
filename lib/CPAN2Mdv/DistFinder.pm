@@ -43,6 +43,7 @@ sub _onpriv_start {
 
     # store config
     $h->{conf}  = $args;
+    # FIXME: download+update at given freq
     my $pkgfile = $h->{conf}{General}{cache} . '/02packages.details.txt';
     open my $pkgfh, '<', $pkgfile or die "can't open '$pkgfile': $!";
     $h->{pkgfh} = $pkgfh;
