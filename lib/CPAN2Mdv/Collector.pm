@@ -39,8 +39,8 @@ sub _onpub_task {
     $k->post( 'journal', 'log', "task: $name\n" );
 
     # fetch information
-    my $url = "http://search.cpan.org/dist/$name/";
-    my $html = qx[ curl --silent $url ];
+    my $pkgpage = "http://search.cpan.org/dist/$name/";
+    my $html = qx[ curl --silent $pkgpage ];
     # FIXME: use poco-client-http
 
     my $tree = HTML::TreeBuilder->new_from_content($html);
