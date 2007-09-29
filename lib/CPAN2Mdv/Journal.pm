@@ -52,6 +52,8 @@ sub _onpub_log {
 sub _onpriv_start {
     my ($k, $h, $session, $args) = @_[KERNEL, HEAP, SESSION, ARG0];
 
+    $k->alias_set( 'journal' );
+
     # store session names.
     $h->{alias} = {
         $args->{main} => 'main',
@@ -60,7 +62,8 @@ sub _onpriv_start {
 
     #my $h->{format} = DateTime::Format::Strptime->new( '%b-%d %T' );
 
-    $k->yield('log', "start complete\n");
+    $k->post ( $args->{main}, 'rendezvous' ); # signal main that we're started
+    $k->yield( 'log', "start complete\n" );   # logging
 }
 
 #--
