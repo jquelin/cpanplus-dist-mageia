@@ -4,6 +4,7 @@
 
 package CPAN2Mdv::Collector;
 
+use HTML::TreeBuilder;
 use POE;
 
 
@@ -30,7 +31,33 @@ sub spawn {
 
 sub _onpub_task {
     my ($k, $h, $dist) = @_[KERNEL, HEAP, ARG0];
-    print "doit\n"
+    my $name = $dist->name;
+
+    $k->post( 'journal', 'log', "task: $name\n" );
+
+    # fetch information
+    my $url = "http://search.cpan.org/dist/$name/";
+    my $html = qx[ curl --silent $url ];
+    # FIXME: use poco-client-http
+
+    my $tree = HTML::TreeBuilder->new_from_content($html);
+
+    # version
+    my $vers = $tree->look_down( _tag => 'td', class=>'cell')->as_trimmed_text;
+    $vers =~ s/^$name-//;
+    $dist->version($vers);
+
+    # url
+    my $url = $tree->look_down( _tag => 'a', sub {$_[0]->as_text eq
+            'Download' })->attr('href');
+    $url = "http://search.cpan.org$url";
+    $dist->url($url);
+
+
+    $tree->delete;
+
+    $k->post( 'journal', 'log', "done: $name-$vers\n" );
+
 }
 
 
