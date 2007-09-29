@@ -18,9 +18,19 @@ sub spawn {
         args          => [ $args ],
         inline_states => {
             '_start'    => \&_onpriv_start,
+            'resolve'   => \&_onpub_resolve,
         },
     );
     return $session->ID;
+}
+
+
+#--
+# public events
+
+sub _onpub_resolve {
+    my $a = $_[ARG0];
+    print "$a\n";
 }
 
 
