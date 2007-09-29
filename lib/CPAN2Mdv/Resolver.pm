@@ -47,7 +47,7 @@ sub _onpub_resolve {
         $path =~ s/-\d.*$//;  # clean version
         $dist->name($path);
         $k->post( 'journal', 'log', "done: $path\n" );
-        $k->post( 'main', 'resolved', $dist );
+        $k->post( 'main', 'resolver_done', $dist );
         return;
     }
 

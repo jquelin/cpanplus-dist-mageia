@@ -26,8 +26,9 @@ die "Couldn't find a suitable configuration file.\n(Try: $0 --help)\n"
 # create main session.
 POE::Session->create(
     inline_states => {
-        _start      => \&_onpriv_start,
-        rendezvous => \&_onpub_rendezvous,
+        '_start'        => \&_onpriv_start,
+        'rendezvous'    => \&_onpub_rendezvous,
+        'resolver_done' => \&_onpub_resolver_done,
     }
 );
 
@@ -66,6 +67,9 @@ sub _onpub_rendezvous {
     }
 }
 
+
+sub _onpub_resolver_done {
+}
 
 #--
 # private events
