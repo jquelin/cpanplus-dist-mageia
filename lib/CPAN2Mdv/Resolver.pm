@@ -2,7 +2,7 @@
 #
 #
 
-package CPAN2Mdv::DistFinder;
+package CPAN2Mdv::Resolver;
 
 use POE;
 
@@ -58,7 +58,7 @@ sub _onpub_resolve {
 
 sub _onpriv_start {
     my ($k, $h, $args) = @_[KERNEL, HEAP, ARG0];
-    my $alias = 'distfinder';
+    my $alias = 'resolver';
 
     # store config.
     $h->{conf}  = $args;
