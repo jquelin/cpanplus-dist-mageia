@@ -40,6 +40,7 @@ sub _onpub_rendezvous {
 
     # if rdv with journal, then launch other sessions.
     if ( $from eq 'journal' ) {
+        $k->post( 'journal', 'ident', 'main' );
     }
 
     $k->post( 'journal', 'log', "rendezvous with $from\n" ); # log rdv
@@ -53,7 +54,7 @@ sub _onpriv_start {
     my ($k, $session) = @_[KERNEL, SESSION];
 
     $k->alias_set( 'main' );
-    CPAN2Mdv::Journal->spawn( { main => $session->ID } );
+    CPAN2Mdv::Journal->spawn;
 }
 
 
