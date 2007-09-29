@@ -9,8 +9,8 @@ use FindBin qw[ $Bin ];
 use lib "$Bin/../lib"; #  if not installed.
 
 use Config::Tiny;
-use CPAN2Mdv::DistFinder;
 use CPAN2Mdv::Journal;
+use CPAN2Mdv::Resolver;
 use Getopt::Euclid;
 use POE;
 
@@ -42,9 +42,9 @@ sub _onpub_rendezvous {
     # if rdv with journal, then launch other sessions.
     if ( $from eq 'journal' ) {
         $k->post( 'journal', 'ident', 'main' );
-        CPAN2Mdv::DistFinder->spawn($conf);
+        CPAN2Mdv::Resolver->spawn($conf);
 
-        my %waitfor; @waitfor{ qw[ distfinder ] } = ();
+        my %waitfor; @waitfor{ qw[ resolver ] } = ();
         $h->{waitfor} = \%waitfor;
     }
 
@@ -58,7 +58,7 @@ sub _onpub_rendezvous {
     # process @ARGV
     if ( $ARGV{'<modules>'} ) {
         $k->post( 'journal', 'log', "processing \@ARGV\n" );
-        $k->post( 'distfinder', 'resolve', $_ ) for @{ $ARGV{'<modules>'} };
+        $k->post( 'resolver', 'resolve', $_ ) for @{ $ARGV{'<modules>'} };
     }
 }
 
@@ -75,21 +75,19 @@ sub _onpriv_start {
 
 
 #
-# resolve distrib (audio::mpd::collection -> audio-mpd) DistFinder
+# resolve distrib (audio::mpd::collection -> audio-mpd) Resolver
 #    v
-# resolve to tarball (including version) + metadata
+# resolve to tarball (including version) + metadata  InfoCollecter
 #    v
-# download tarball
+# download tarball   Downloader
 #    v
-# resolve rpm name
+# resolve rpm name + create spec file Specifier
 #    v
-# create spec file
+# build rpm   Builder     > report error, reschedule
 #    v
-# build rpm               > report error, reschedule
+# install rpm Installer   > report error
 #    v
-# install rpm             > report error
-#    v
-# upload rpm to mdv
+# upload rpm to mdv Uploader
 #
 #
 # journal
