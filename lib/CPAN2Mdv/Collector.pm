@@ -18,6 +18,7 @@ sub spawn {
         args          => [ $args ],
         inline_states => {
             '_start'  => \&_onpriv_start,
+            'task'    => \&_onpub_task,
         },
     );
     return $session->ID;
@@ -25,6 +26,12 @@ sub spawn {
 
 
 #--
+#
+
+sub _onpub_task {
+    my ($k, $h, $dist) = @_[KERNEL, HEAP, ARG0];
+    print "doit\n"
+}
 
 
 #--

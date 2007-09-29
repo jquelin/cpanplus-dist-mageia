@@ -68,8 +68,7 @@ sub _onpub_rendezvous {
 }
 
 
-sub _onpub_resolver_done {
-}
+sub _onpub_resolver_done { $_[KERNEL]->post( 'collector', 'task', $_[ARG0] ); }
 
 #--
 # private events
