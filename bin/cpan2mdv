@@ -10,6 +10,7 @@ use lib "$Bin/../lib"; #  if not installed.
 
 use Config::Tiny;
 use CPAN2Mdv::Collector;
+use CPAN2Mdv::Dist;
 use CPAN2Mdv::Journal;
 use CPAN2Mdv::Resolver;
 use Getopt::Euclid;
@@ -60,7 +61,8 @@ sub _onpub_rendezvous {
     # process @ARGV
     if ( $ARGV{'<modules>'} ) {
         $k->post( 'journal', 'log', "processing \@ARGV\n" );
-        $k->post( 'resolver', 'resolve', $_ ) for @{ $ARGV{'<modules>'} };
+        $k->post( 'resolver', 'resolve', CPAN2Mdv::Dist->new({module=>$_}) )
+            for @{ $ARGV{'<modules>'} };
     }
 }
 
