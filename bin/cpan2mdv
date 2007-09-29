@@ -54,6 +54,12 @@ sub _onpub_rendezvous {
     my $remaining = scalar @waitfor ? "(@waitfor remaining)" : '';
     $k->post( 'journal', 'log', "rendezvous with $from $remaining\n" ); # log rdv
     return if scalar @waitfor;
+
+    # process @ARGV
+    if ( $ARGV{'<modules>'} ) {
+        $k->post( 'journal', 'log', "processing \@ARGV\n" );
+        $k->post( 'distfinder', 'resolve', $_ ) for @{ $ARGV{'<modules>'} };
+    }
 }
 
 
@@ -101,7 +107,7 @@ cpan2mdv - rpm generator from cpan
 
 =head1 USAGE
 
-    cpan2mdv [-c <file>]
+    cpan2mdv [-c <file>] [<modules>...]
 
 
 =head1 VERSION
@@ -121,6 +127,17 @@ C</etc/cpan2mdv.conf>, or C<../etc/cpan2mdv.conf>.
 =for Euclid:
     file.type:      readable
     file.default:   -e '/etc/cpan2mdv.conf' ? '/etc/cpan2mdv.conf' : "$FindBin::Bin/../etc/cpan2mdv.conf"
+
+
+
+=item <modules>...
+
+Specify a list of modules to be built.
+
+=for Euclid:
+    modules.type: string
+
+
 
 =item --version
 
