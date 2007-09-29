@@ -31,7 +31,7 @@ sub spawn {
 sub _onpub_resolve {
     my ($k, $h, $module) = @_[KERNEL, HEAP, ARG0];
 
-    $k->post( 'journal', 'log', "resolve $module\n" );
+    $k->post( 'journal', 'log', "task: $module\n" );
 
     # reset file handler.
     my $pkgfh = $h->{pkgfh};
@@ -44,7 +44,7 @@ sub _onpub_resolve {
         my (undef, undef, $dist) = split /\s+/, $line;
         $dist =~ s!^.*/!!;    # clean author
         $dist =~ s/-\d.*$//;  # clean version
-        $k->post( 'journal', 'log', "resolved: $dist\n" );
+        $k->post( 'journal', 'log', "done: $dist\n" );
         $k->post( 'main', 'resolved', $dist );
         return;
     }
