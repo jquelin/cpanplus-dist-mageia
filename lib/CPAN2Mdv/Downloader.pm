@@ -4,6 +4,9 @@
 
 package CPAN2Mdv::Downloader;
 
+use strict;
+use warnings;
+
 use File::Basename;
 use POE;
 

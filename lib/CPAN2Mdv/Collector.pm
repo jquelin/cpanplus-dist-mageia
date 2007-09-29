@@ -4,6 +4,9 @@
 
 package CPAN2Mdv::Collector;
 
+use strict;
+use warnings;
+
 use HTML::TreeBuilder;
 use POE;
 

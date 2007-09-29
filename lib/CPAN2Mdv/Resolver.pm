@@ -4,6 +4,9 @@
 
 package CPAN2Mdv::Resolver;
 
+use strict;
+use warnings;
+
 use POE;
 
 
