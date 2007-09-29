@@ -45,7 +45,6 @@ sub _onpub_rendezvous {
 
     # if rdv with journal, then launch other sessions.
     if ( $h->{alias}{$id} eq 'journal' ) {
-
     }
 }
 
@@ -55,6 +54,8 @@ sub _onpub_rendezvous {
 
 sub _onpriv_start {
     my ($k, $h, $session) = @_[KERNEL, HEAP, SESSION];
+
+    $k->alias_set( 'main' );
 
     # launch journal.
     my $jid = CPAN2Mdv::Journal->spawn( { main => $session->ID } );
@@ -68,9 +69,9 @@ sub _onpriv_start {
 
 
 #
-# resolve distrib (audio::mpd::collection -> audio-mpd)
+# resolve distrib (audio::mpd::collection -> audio-mpd) DistFinder
 #    v
-# resolve to tarball (including version)
+# resolve to tarball (including version) + metadata
 #    v
 # download tarball
 #    v
