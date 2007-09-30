@@ -43,6 +43,17 @@ sub _onpub_task {
     my $spec = "$ENV{HOME}/rpm/SPECS/$pkg.spec";
     $dist->specfile($spec);
 
+    my @docfiles;
+    {
+        my $tarball = $dist->path;
+        open my $tarfh, '-|', "tar ztvf $tarball" or die "can't open '$tarball': $!";
+        while ( defined( my $line = <$tarfh> ) ) {
+            next unless $line =~ /(README|Change(s|log)|LICENSE|META.yml)$/i;
+            push @docfiles, $1;
+        }
+        close $tarfh;
+    }
+
     unlink $spec;
     my $template = $h->{conf}{specifier}{template};
     open my $tplfh,  '<', $template or die "can't open '$template': $!";
@@ -51,6 +62,7 @@ sub _onpub_task {
         $line =~ s/DISTNAME/$name/;
         $line =~ s/DISTVERS/$vers/;
         $line =~ s/DISTURL/$url/;
+        $line =~ s/DISTDOC/@docfiles ? "%doc @docfiles" : ''/e;
         $line =~ s/DISTEXTRA/join( "\n", @{ $dist->extra_files || [] })/e;
 
         print $specfh $line;
