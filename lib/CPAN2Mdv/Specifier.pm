@@ -39,6 +39,10 @@ sub _onpub_task {
     my $summary = $dist->summary;
     my $descr   = $dist->description;
     my $url     = $dist->url;
+    my $build_requires =
+        join "\n",
+        map { "BuildRequires: perl($_)" }
+        @{ $dist->build_requires };
     $k->post( 'journal', 'log', "task: $name-$vers\n" );
 
     my $pkg = $dist->pkgname;
@@ -66,6 +70,7 @@ sub _onpub_task {
         $line =~ s/DISTVERS/$vers/;
         $line =~ s/DISTSUMMARY/$summary/;
         $line =~ s/DISTURL/$url/;
+        $line =~ s/DISTBUILDREQUIRES/$build_requires/;
         $line =~ s/DISTDESCR/$descr/;
         $line =~ s/DISTDOC/@docfiles ? "%doc @docfiles" : ''/e;
         $line =~ s/DISTEXTRA/join( "\n", @{ $dist->extra_files || [] })/e;
