@@ -18,6 +18,7 @@ use CPAN2Mdv::Installer;
 use CPAN2Mdv::Journal;
 use CPAN2Mdv::Resolver;
 use CPAN2Mdv::Specifier;
+use CPAN2Mdv::Uploader;
 use Getopt::Euclid;
 use POE;
 
@@ -69,10 +70,11 @@ sub _onpub_rendezvous {
         CPAN2Mdv::Specifier->spawn($conf);
         CPAN2Mdv::Builder->spawn($conf);
         CPAN2Mdv::Installer->spawn($conf);
+        CPAN2Mdv::Uploader->spawn($conf);
 
         my %waitfor;
         @waitfor{ qw[ resolver collector cooker downloader 
-                      specifier builder installer ] } = ();
+                      specifier builder installer uploader ] } = ();
         $h->{waitfor} = \%waitfor;
     }
 
@@ -104,7 +106,7 @@ sub _onpub_specifier_done  { $_[KERNEL]->post( 'builder',    'task', $_[ARG0] );
 sub _onpub_builder_done    { warn "build finished!\n"; $_[KERNEL]->post( 'installer',    'task', $_[ARG0] ); }
 sub _onpub_installer_done  {
     my ($k, $dist) = @_[KERNEL, ARG0];
-    $k->post ( 'uploader', 'task', $dist )       if $dist->rpm !~ /^$conf->{general}{cache}/;
+    #$k->post ( 'uploader', 'task', $dist )       if $dist->rpm !~ /^$conf->{general}{cache}/;
     $k->yield( 'need_module', $dist->is_prereq ) if defined $dist->is_prereq;
 }
 

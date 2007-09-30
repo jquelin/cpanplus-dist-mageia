@@ -102,7 +102,7 @@ sub _onpriv_build_completed {
         return;
     }
 
-    #$k->post( 'journal', 'log', "done: $spec\n" );
+    #$k->post( 'journal', 'log', "done: $rpm\n" );
     $k->post( 'main', 'builder_done', $dist );
 }
 
