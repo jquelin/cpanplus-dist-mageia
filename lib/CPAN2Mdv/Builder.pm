@@ -21,8 +21,8 @@ sub spawn {
     my $session = POE::Session->create(
         args          => [ $args ],
         inline_states => {
+            '_build_completed'  => \&_onpriv_build_completed,
             '_build_continued'  => \&_onpriv_build_continued,
-            '_build_finished'   => \&_onpriv_build_finished,
             '_start'            => \&_onpriv_start,
             'task'              => \&_onpub_task,
         },
@@ -51,10 +51,10 @@ sub _onpub_task {
 
     my $wid = $wheel->ID;
     my $pid = $wheel->PID;
-    $h->{wheel}{$wid}  = $wheel;                # need to keep a ref to the wheel
-    $h->{output}{$wid} = '';                    # initializing build output
-    $h->{wid}{$pid}    = $wid;                  # storing pid
-    $k->sig_child( $pid => "_build_finished" ); # wait for this child
+    $h->{wheel}{$wid}  = $wheel;                 # need to keep a ref to the wheel
+    $h->{output}{$wid} = '';                     # initializing build output
+    $h->{wid}{$pid}    = $wid;                   # storing pid
+    $k->sig_child( $pid => "_build_completed" ); # wait for this child
 
     #$k->post( 'journal', 'log', "done: $spec\n" );
     #$k->post( 'main', 'builder_done', $dist );
@@ -66,13 +66,14 @@ sub _onpub_task {
 
 sub _onpriv_build_continued { $_[HEAP]->{output}{$_[ARG1]} .= "$_[ARG0]\n"; }
 
-sub _onpriv_build_finished {
+sub _onpriv_build_completed {
     my ($k, $h, $pid, $rv) = @_[KERNEL, HEAP, ARG1, ARG2];
 
     my $wid = delete $h->{wid}{$pid};       # remove pid
     my $out = delete $h->{output}{$wid};    # get build output
     delete $h->{wheel}{$wid};               # don't forget to release the wheel
 
+    print "$out\n";
 }
 
 sub _onpriv_start {
