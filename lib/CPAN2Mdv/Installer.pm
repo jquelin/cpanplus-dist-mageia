@@ -77,6 +77,14 @@ sub _onpriv_install_completed {
         # oops, there were some errors.
 
         if ( $out =~ /^\s+perl.(\S+?)\) .*is needed by/m ) {
+            # FIXME: may be more than one prereq:
+            #  - store them in $h->{prereq}{$name}{prereqX},
+            #  - delete them when they're complete
+            #  - retry install when no more prereq
+            # (keeping dist->is_prereq to check if there are still
+            # modules dependent one the one being installed)
+            # warning: will need to check if module hasn't been
+            # installed in between
             my $prereq = $1;
             my $new = CPAN2Mdv::Dist->new({module=>$prereq, is_prereq=>$dist});
             $k->post( 'journal', 'log', "hold: $name needs $prereq\n" );
