@@ -8,6 +8,7 @@ use strict;
 use warnings;
 
 use HTML::TreeBuilder;
+use Pod::POM;
 use POE;
 
 
@@ -51,12 +52,35 @@ sub _onpub_task {
     $dist->version($vers);
 
     # url
-    my $url = $tree->look_down( _tag => 'a', sub {$_[0]->as_text eq
-            'Download' })->attr('href');
+    my $url = $tree->look_down( _tag => 'a', sub {$_[0]->as_text eq 'Download' })->attr('href');
     $url = "http://search.cpan.org$url";
     $dist->url($url);
 
-    # FIXME: summary, license, description
+    # FIXME: license
+
+    my $a = $tree->look_down( _tag=> 'a', sub {$_[0]->attr('href') =~ /\.pm$/ } );
+    my $podurl = $pkgpage . $a->attr('href');
+    my $podhtml = qx[ curl --silent $podurl ];
+    # FIXME: use poco-client-http
+    my $podtree = HTML::TreeBuilder->new_from_content($podhtml);
+    my $srcurl = $podtree->look_down( _tag=>'a', sub {$_[0]->as_text eq 'Source' })->attr('href');
+    $podtree->delete;
+    $srcurl = 'http://search.cpan.org' . $srcurl;
+    my $src = qx[ curl --silent $srcurl ];
+    # FIXME: use poco-client-http
+    my $parser = Pod::POM->new;
+    my $pom = $parser->parse_text($src) || die $parser->error;
+    foreach my $head1 ($pom->head1()) {
+        my $title = $head1->title;
+        if ( $title eq 'NAME' ) {
+            my $content = $head1->content;
+            $content =~ s/^[^-]+ - //;
+            $dist->summary($content);
+        }
+
+        $dist->description($head1->content) if $title eq 'DESCRIPTION';
+    }
+
 
     $tree->delete;
 
