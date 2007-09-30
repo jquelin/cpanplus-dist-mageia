@@ -34,9 +34,11 @@ sub spawn {
 sub _onpub_task {
     my ($k, $h, $dist) = @_[KERNEL, HEAP, ARG0];
 
-    my $name = $dist->name;
-    my $vers = $dist->version;
-    my $url  = $dist->url;
+    my $name    = $dist->name;
+    my $vers    = $dist->version;
+    my $summary = $dist->summary;
+    my $descr   = join('', @{ $dist->description } );
+    my $url     = $dist->url;
     $k->post( 'journal', 'log', "task: $name-$vers\n" );
 
     my $pkg = $dist->pkgname;
@@ -54,6 +56,7 @@ sub _onpub_task {
         close $tarfh;
     }
 
+    #
     unlink $spec;
     my $template = $h->{conf}{specifier}{template};
     open my $tplfh,  '<', $template or die "can't open '$template': $!";
@@ -61,7 +64,9 @@ sub _onpub_task {
     while ( defined( my $line = <$tplfh> ) ) {
         $line =~ s/DISTNAME/$name/;
         $line =~ s/DISTVERS/$vers/;
+        $line =~ s/DISTSUMMARY/$summary/;
         $line =~ s/DISTURL/$url/;
+        $line =~ s/DISTDESCR/$descr/;
         $line =~ s/DISTDOC/@docfiles ? "%doc @docfiles" : ''/e;
         $line =~ s/DISTEXTRA/join( "\n", @{ $dist->extra_files || [] })/e;
 
