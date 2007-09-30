@@ -37,7 +37,7 @@ sub _onpub_task {
     my $name    = $dist->name;
     my $vers    = $dist->version;
     my $summary = $dist->summary;
-    my $descr   = join('', @{ $dist->description } );
+    my $descr   = $dist->description;
     my $url     = $dist->url;
     $k->post( 'journal', 'log', "task: $name-$vers\n" );
 
