@@ -54,10 +54,8 @@ sub _onpub_task {
     $h->{wheel}{$wid}  = $wheel;                 # need to keep a ref to the wheel
     $h->{output}{$wid} = '';                     # initializing build output
     $h->{wid}{$pid}    = $wid;                   # storing pid
+    $h->{dist}{$wid}   = $dist;                  # storing dist
     $k->sig_child( $pid => "_build_completed" ); # wait for this child
-
-    #$k->post( 'journal', 'log', "done: $spec\n" );
-    #$k->post( 'main', 'builder_done', $dist );
 }
 
 #--
@@ -69,11 +67,31 @@ sub _onpriv_build_continued { $_[HEAP]->{output}{$_[ARG1]} .= "$_[ARG0]\n"; }
 sub _onpriv_build_completed {
     my ($k, $h, $pid, $rv) = @_[KERNEL, HEAP, ARG1, ARG2];
 
-    my $wid = delete $h->{wid}{$pid};       # remove pid
-    my $out = delete $h->{output}{$wid};    # get build output
-    delete $h->{wheel}{$wid};               # don't forget to release the wheel
+    my $wid  = delete $h->{wid}{$pid};       # remove pid
+    my $out  = delete $h->{output}{$wid};    # get build output
+    my $dist = delete $h->{dist}{$wid};      # get dist object
+    delete $h->{wheel}{$wid};                # don't forget to release the wheel
 
-    print "$out\n";
+    if ( $out =~ /^error:/m ) {
+        # oops, there were some errors.
+
+        if ( $out =~ /Can't locate (\S+)\.pm in \@INC/ ) {
+            # missing prereq.
+            my $prereq = $1; $prereq =~ s!/!::!g;
+
+            my $new = CPAN2Mdv::Dist->new({module=>$prereq, is_prereq=>$dist});
+            my $name = $dist->name;
+            $k->post( 'journal', 'log', "hold: $name needs $prereq\n" );
+            $k->post( 'main', 'need_module', $new );
+            return;
+        }
+
+        # FIXME: deal with error
+        return;
+    }
+
+    #$k->post( 'journal', 'log', "done: $spec\n" );
+    $k->post( 'main', 'builder_done', $dist );
 }
 
 sub _onpriv_start {
