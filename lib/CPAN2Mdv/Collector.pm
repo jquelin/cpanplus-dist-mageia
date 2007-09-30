@@ -7,9 +7,11 @@ package CPAN2Mdv::Collector;
 use strict;
 use warnings;
 
+use CPAN2Mdv::Dist;
 use HTML::TreeBuilder;
 use Pod::POM;
 use POE;
+use YAML;
 
 
 
@@ -55,6 +57,25 @@ sub _onpub_task {
     my $url = $tree->look_down( _tag => 'a', sub {$_[0]->as_text eq 'Download' })->attr('href');
     $url = "http://search.cpan.org$url";
     $dist->url($url);
+
+    # build_requires
+    my $ameta = $tree->look_down( _tag => 'a', sub {$_[0]->as_text eq 'META.yml' });
+    if ( defined $ameta ) {
+        my $metaurl = 'http://search.cpan.org' . $ameta->attr('href');
+        my $yaml = qx[ curl --silent $metaurl ];
+        # FIXME: use poco-client-http
+        my $meta = Load($yaml);
+        delete $meta->{requires}{perl};
+        delete $meta->{build_requires}{perl};
+        my @reqs = ( keys %{ $meta->{requires} }, keys %{ $meta->{build_requires} } );
+        $dist->build_requires(\@reqs);
+        foreach my $req ( sort @reqs ) {
+            eval { require $req };
+            next unless $@;
+            # FIXME: post in main that we need some modules
+            #$k->post( 'main', 'need_module',CPAN2Mdv::Dist->new({module=>$req}) );
+        }
+    }
 
     # FIXME: license
 
