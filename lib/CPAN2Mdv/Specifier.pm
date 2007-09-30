@@ -28,6 +28,33 @@ sub spawn {
 }
 
 
+sub _onpub_task {
+    my ($k, $h, $dist) = @_[KERNEL, HEAP, ARG0];
+
+    my $name = $dist->name;
+    my $vers = $dist->version;
+    my $url  = $dist->url;
+    $k->post( 'journal', 'log', "task: $name-$vers\n" );
+
+    my $pkg = "perl-$name";
+    my $spec = "$ENV{HOME}/rpm/SPECS/$pkg.spec";
+    $dist->specfile($spec);
+    $dist->pkgname($pkg);
+
+    unlink $spec;
+    my $template = $h->{conf}{specifier}{template};
+    open my $tplfh,  '<', $template or die "can't open '$template': $!";
+    open my $specfh, '>', $spec     or die "can't open '$spec': $!";
+    while ( defined( my $line = <$tplfh> ) ) {
+        $line =~ s/DISTNAME/$name/;
+        $line =~ s/DISTVERS/$vers/;
+        $line =~ s/DISTURL/$url/;
+        print $specfh $line;
+    }
+    close $specfh;
+    close $tplfh;
+
+}
 
 #--
 # private events
