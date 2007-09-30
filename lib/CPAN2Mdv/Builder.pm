@@ -79,6 +79,9 @@ sub _onpriv_build_completed {
         if ( $out =~ /Can't locate (\S+)\.pm in \@INC/ ) {
             # missing prereq.
             my $prereq = $1; $prereq =~ s!/!::!g;
+            #my @prereqs = @{ $dist->build_requires };
+            #push @prereqs, $prereq;
+            #$dist->build_requires();
 
             my $new = CPAN2Mdv::Dist->new({module=>$prereq, is_prereq=>$dist});
             $k->post( 'journal', 'log', "hold: $name needs $prereq\n" );
@@ -102,7 +105,12 @@ sub _onpriv_build_completed {
         return;
     }
 
-    #$k->post( 'journal', 'log', "done: $rpm\n" );
+    my $pkgname = $dist->pkgname;
+    my $rpm  = glob "$ENV{HOME}/rpm/RPMS/*/$pkgname-*.rpm";
+    my $srpm = glob "$ENV{HOME}/rpm/SRPMS/$pkgname-*.src.rpm";
+    $dist->rpm( $rpm );
+    $dist->srpm( $srpm );
+    $k->post( 'journal', 'log', "done: $srpm\n" );
     $k->post( 'main', 'builder_done', $dist );
 }
 
