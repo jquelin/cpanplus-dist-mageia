@@ -86,6 +86,7 @@ sub _onpriv_build_completed {
             return;
         }
 
+        print ">>>>>>> ERROR\n$out";
         # FIXME: deal with error
         return;
     }
