@@ -14,6 +14,7 @@ use CPAN2Mdv::Collector;
 use CPAN2Mdv::Cooker;
 use CPAN2Mdv::Dist;
 use CPAN2Mdv::Downloader;
+use CPAN2Mdv::Installer;
 use CPAN2Mdv::Journal;
 use CPAN2Mdv::Resolver;
 use CPAN2Mdv::Specifier;
@@ -43,6 +44,7 @@ POE::Session->create(
         # soft errors handling
         'need_module'     => \&_onpub_need_module,
         'need_respec'     => \&_onpub_need_respec,
+        'need_install'    => \&_onpub_need_install,
     }
 );
 
@@ -65,8 +67,11 @@ sub _onpub_rendezvous {
         CPAN2Mdv::Downloader->spawn($conf);
         CPAN2Mdv::Specifier->spawn($conf);
         CPAN2Mdv::Builder->spawn($conf);
+        CPAN2Mdv::Installer->spawn($conf);
 
-        my %waitfor; @waitfor{ qw[ resolver collector cooker downloader specifier builder ] } = ();
+        my %waitfor;
+        @waitfor{ qw[ resolver collector cooker downloader 
+                      specifier builder installer ] } = ();
         $h->{waitfor} = \%waitfor;
     }
 
@@ -88,6 +93,7 @@ sub _onpub_rendezvous {
 
 sub _onpub_need_module     { $_[KERNEL]->post( 'resolver',  'task', $_[ARG0]); }
 sub _onpub_need_respec     { $_[KERNEL]->post( 'specifier', 'task', $_[ARG0] ); }
+sub _onpub_need_install    { $_[KERNEL]->post( 'installer', 'task', $_[ARG0]); }
 
 sub _onpub_resolver_done   { $_[KERNEL]->post( 'collector',  'task', $_[ARG0] ); }
 sub _onpub_collector_done  { $_[KERNEL]->post( 'cooker',     'task', $_[ARG0] ); }
