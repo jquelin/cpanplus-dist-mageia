@@ -21,7 +21,7 @@ sub spawn {
         args          => [ $args ],
         inline_states => {
             '_start'  => \&_onpriv_start,
-            'resolve' => \&_onpub_resolve,
+            'task'    => \&_onpub_task,
         },
     );
     return $session->ID;
@@ -31,7 +31,7 @@ sub spawn {
 #--
 # public events
 
-sub _onpub_resolve {
+sub _onpub_task {
     my ($k, $h, $dist) = @_[KERNEL, HEAP, ARG0];
 
     my $module = $dist->module;
