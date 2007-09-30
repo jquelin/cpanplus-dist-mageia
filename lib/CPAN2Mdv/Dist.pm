@@ -9,7 +9,7 @@ use warnings;
 
 use base qw[ Class::Accessor::Fast ];
 __PACKAGE__->mk_accessors
-    ( qw[ name module path url version ] );
+    ( qw[ name module path pkgname specfile url version ] );
 
 1;
 __END__
