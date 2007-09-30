@@ -57,6 +57,7 @@ sub _onpub_task {
     close $specfh;
     close $tplfh;
 
+    $k->post( 'main', 'specifier_done', $dist );
 }
 
 #--
