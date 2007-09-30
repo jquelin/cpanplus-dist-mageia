@@ -74,15 +74,26 @@ sub _onpriv_build_completed {
 
     if ( $out =~ /^error:/m ) {
         # oops, there were some errors.
+        my $name = $dist->name;
 
         if ( $out =~ /Can't locate (\S+)\.pm in \@INC/ ) {
             # missing prereq.
             my $prereq = $1; $prereq =~ s!/!::!g;
 
             my $new = CPAN2Mdv::Dist->new({module=>$prereq, is_prereq=>$dist});
-            my $name = $dist->name;
             $k->post( 'journal', 'log', "hold: $name needs $prereq\n" );
             $k->post( 'main', 'need_module', $new );
+            return;
+        }
+        
+        if ( $out =~ /^\s+Installed .but unpackaged. file.s. found:\n(.*)\z/ms ) {
+            # additional file to be packaged.
+            my $files = $1;
+            $files =~ s/^\s+//mg; # remove spaces
+            my @files = split /\n/, $files;
+            $dist->extra_files( \@files );
+            $k->post( 'journal', 'log', "hold: $name needs respec (missing files)\n" );
+            $k->post( 'main', 'need_respec', $dist );
             return;
         }
 
