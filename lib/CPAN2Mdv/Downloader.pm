@@ -52,7 +52,7 @@ sub _onpub_task {
     # download
     # FIXME: poco-c-http
     system( "curl --silent --location --output $path $url" );
-    $k->post( 'journal', 'log', "task: $path\n" );
+    $k->post( 'journal', 'log', "done: $path\n" );
     $k->post( 'main', 'downloader_done', $dist );
 }
 
