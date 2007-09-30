@@ -52,6 +52,8 @@ sub _onpub_task {
         $line =~ s/DISTNAME/$name/;
         $line =~ s/DISTVERS/$vers/;
         $line =~ s/DISTURL/$url/;
+        $line =~ s/DISTEXTRA/join( "\n", @{ $dist->extra_files || [] })/e;
+
         print $specfh $line;
     }
     close $specfh;
