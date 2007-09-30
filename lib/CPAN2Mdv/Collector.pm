@@ -30,7 +30,7 @@ sub spawn {
 
 
 #--
-#
+# public events
 
 sub _onpub_task {
     my ($k, $h, $dist) = @_[KERNEL, HEAP, ARG0];
