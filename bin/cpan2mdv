@@ -14,6 +14,7 @@ use CPAN2Mdv::Dist;
 use CPAN2Mdv::Downloader;
 use CPAN2Mdv::Journal;
 use CPAN2Mdv::Resolver;
+use CPAN2Mdv::Specifier;
 use Getopt::Euclid;
 use POE;
 
@@ -50,8 +51,9 @@ sub _onpub_rendezvous {
         CPAN2Mdv::Resolver->spawn($conf);
         CPAN2Mdv::Collector->spawn($conf);
         CPAN2Mdv::Downloader->spawn($conf);
+        CPAN2Mdv::Specifier->spawn($conf);
 
-        my %waitfor; @waitfor{ qw[ resolver collector downloader ] } = ();
+        my %waitfor; @waitfor{ qw[ resolver collector downloader specifier ] } = ();
         $h->{waitfor} = \%waitfor;
     }
 
