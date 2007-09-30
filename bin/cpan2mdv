@@ -33,6 +33,7 @@ POE::Session->create(
         'resolver_done'   => \&_onpub_resolver_done,
         'collector_done'  => \&_onpub_collector_done,
         'downloader_done' => \&_onpub_downloader_done,
+        'specifier_done'  => \&_onpub_specifier_done,
     }
 );
 
@@ -77,6 +78,7 @@ sub _onpub_rendezvous {
 sub _onpub_resolver_done   { $_[KERNEL]->post( 'collector',  'task', $_[ARG0] ); }
 sub _onpub_collector_done  { $_[KERNEL]->post( 'downloader', 'task', $_[ARG0] ); }
 sub _onpub_downloader_done { $_[KERNEL]->post( 'specifier',  'task', $_[ARG0] ); }
+sub _onpub_specifier_done  { $_[KERNEL]->post( 'builder',    'task', $_[ARG0] ); }
 
 
 #--
