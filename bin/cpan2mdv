@@ -9,6 +9,7 @@ use FindBin qw[ $Bin ];
 use lib "$Bin/../lib"; #  if not installed.
 
 use Config::Tiny;
+use CPAN2Mdv::Builder;
 use CPAN2Mdv::Collector;
 use CPAN2Mdv::Dist;
 use CPAN2Mdv::Downloader;
@@ -54,8 +55,9 @@ sub _onpub_rendezvous {
         CPAN2Mdv::Collector->spawn($conf);
         CPAN2Mdv::Downloader->spawn($conf);
         CPAN2Mdv::Specifier->spawn($conf);
+        CPAN2Mdv::Builder->spawn($conf);
 
-        my %waitfor; @waitfor{ qw[ resolver collector downloader specifier ] } = ();
+        my %waitfor; @waitfor{ qw[ resolver collector downloader specifier builder ] } = ();
         $h->{waitfor} = \%waitfor;
     }
 
