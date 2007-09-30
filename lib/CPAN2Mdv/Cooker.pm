@@ -48,9 +48,17 @@ sub _onpub_task {
             my $pkg = ( split /\s+/, $line )[-1];
 
             my $repository = $fh == $h->{mainfh} ? 'main' : 'contrib';
-            my $url = $h->{conf}{cooker}{$repository} . "/$pkg";
-            $dist->rpm($url);
             $k->post( 'journal', 'log', "hold: $repository/$pkg\n" );
+            my $url = $h->{conf}{cooker}{$repository} . "/$pkg";
+
+            # download
+            my $path = $h->{conf}{general}{cache} . "/rpms/$pkg";
+            system( "curl --silent --output $path $url" );
+            # FIXME: poco-c-ftp
+            # FIXME: check if already downloaded
+
+            $dist->rpm($path);
+            $k->post( 'journal', 'log', "done: $path\n" );
             $k->post( 'main', 'need_install', $dist );
             return;
         }
