@@ -76,6 +76,14 @@ sub _onpriv_install_completed {
     if ( $rv != 0 ) {
         # oops, there were some errors.
 
+        if ( $out =~ /^\s+perl.(\S+?)\) .*is needed by/m ) {
+            my $prereq = $1;
+            my $new = CPAN2Mdv::Dist->new({module=>$prereq, is_prereq=>$dist});
+            $k->post( 'journal', 'log', "hold: $name needs $prereq\n" );
+            $k->post( 'main', 'need_module', $new );
+            return;
+        }
+
         print ">>>>>>> ERROR\n$out";
         # FIXME: deal with error
         return;
