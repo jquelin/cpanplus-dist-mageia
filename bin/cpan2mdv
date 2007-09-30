@@ -32,6 +32,7 @@ POE::Session->create(
     inline_states => {
         '_start'          => \&_onpriv_start,
         'rendezvous'      => \&_onpub_rendezvous,
+        'need_module'     => \&_onpub_need_module,
         'resolver_done'   => \&_onpub_resolver_done,
         'collector_done'  => \&_onpub_collector_done,
         'downloader_done' => \&_onpub_downloader_done,
@@ -72,12 +73,13 @@ sub _onpub_rendezvous {
     # process @ARGV
     if ( $ARGV{'<modules>'} ) {
         $k->post( 'journal', 'log', "processing \@ARGV\n" );
-        $k->post( 'resolver', 'resolve', CPAN2Mdv::Dist->new({module=>$_}) )
+        $k->yield( 'need_module', CPAN2Mdv::Dist->new({module=>$_}) )
             for @{ $ARGV{'<modules>'} };
     }
 }
 
 
+sub _onpub_need_module     { $_[KERNEL]->post( 'resolver', 'task', $_[ARG0]); }
 sub _onpub_resolver_done   { $_[KERNEL]->post( 'collector',  'task', $_[ARG0] ); }
 sub _onpub_collector_done  { $_[KERNEL]->post( 'downloader', 'task', $_[ARG0] ); }
 sub _onpub_downloader_done { $_[KERNEL]->post( 'specifier',  'task', $_[ARG0] ); }
