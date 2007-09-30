@@ -53,7 +53,7 @@ sub _onpub_task {
     my $pid = $wheel->PID;
     $h->{wheel}{$wid}  = $wheel;                # need to keep a ref to the wheel
     $h->{output}{$wid} = '';                    # initializing build output
-    $h->{wid}{$pid}    = $wid;                  # storing wheel id
+    $h->{wid}{$pid}    = $wid;                  # storing pid
     $k->sig_child( $pid => "_build_finished" ); # wait for this child
 
     #$k->post( 'journal', 'log', "done: $spec\n" );
@@ -69,13 +69,10 @@ sub _onpriv_build_continued { $_[HEAP]->{output}{$_[ARG1]} .= "$_[ARG0]\n"; }
 sub _onpriv_build_finished {
     my ($k, $h, $pid, $rv) = @_[KERNEL, HEAP, ARG1, ARG2];
 
-    my $wid = delete $h->{wid}{$pid};
-    my $out = delete $h->{output}{$wid};
-    delete $h->{wheel}{$wid}; # don't forget to release the wheel
+    my $wid = delete $h->{wid}{$pid};       # remove pid
+    my $out = delete $h->{output}{$wid};    # get build output
+    delete $h->{wheel}{$wid};               # don't forget to release the wheel
 
-    print ">>>>>>>>>>><\n";
-    print $out;
-    #$k->sig_handled();
 }
 
 sub _onpriv_start {
