@@ -54,7 +54,8 @@ sub _onpub_task {
         return;
     }
 
-    # FIXME: rerport error
+    print "not found\n";
+    # FIXME: report error
 }
 
 
