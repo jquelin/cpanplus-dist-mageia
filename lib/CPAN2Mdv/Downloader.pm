@@ -44,7 +44,7 @@ sub _onpub_task {
 
     if ( -r $path ) {
         # file already exists
-        $k->post( 'journal', 'log', "task: $path\n" );
+        $k->post( 'journal', 'log', "done: $path\n" );
         $k->post( 'main', 'downloader_done', $dist );
         return;
     }
