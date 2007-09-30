@@ -44,21 +44,16 @@ sub _onpub_task {
         Program     => [ 'rpmbuild', '-ba', $spec ],
         Priority    => +5,  # child process priority
 
-        # Define I/O events to emit.  Most are optional.
-        StdoutEvent => '_build_continued',    # Received data from the child's STDOUT.
-        StderrEvent => '_build_continued',    # Received data from the child's STDERR.
-        #CloseEvent  => 'child_closed',  # Child closed all output handles.
-
-        # Optionally specify different I/O formats.
-        #StdoutFilter => POE::Filter::Line->new(), # Child output is a stream.
-        #StderrFilter => POE::Filter::Line->new(),   # Child errors are lines.
+        # i/o events
+        StdoutEvent => '_build_continued',    # received data from the child's stdout.
+        StderrEvent => '_build_continued',    # received data from the child's stderr.
     );
 
     my $wid = $wheel->ID;
     my $pid = $wheel->PID;
     $h->{wheel}{$wid}  = $wheel;                # need to keep a ref to the wheel
-    $h->{output}{$wid} = '';
-    $h->{wid}{$pid}    = $wid;
+    $h->{output}{$wid} = '';                    # initializing build output
+    $h->{wid}{$pid}    = $wid;                  # storing wheel id
     $k->sig_child( $pid => "_build_finished" ); # wait for this child
 
     #$k->post( 'journal', 'log', "done: $spec\n" );
