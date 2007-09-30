@@ -45,6 +45,7 @@ sub _onpub_task {
     if ( -r $path ) {
         # file already exists
         $k->post( 'journal', 'log', "task: $path\n" );
+        $k->post( 'main', 'downloader_done', $dist );
         return;
     }
 
@@ -52,6 +53,7 @@ sub _onpub_task {
     # FIXME: poco-c-http
     system( "curl --silent --location --output $path $url" );
     $k->post( 'journal', 'log', "task: $path\n" );
+    $k->post( 'main', 'downloader_done', $dist );
 }
 
 
