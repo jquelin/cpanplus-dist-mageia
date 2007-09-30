@@ -78,7 +78,7 @@ sub _onpub_task {
             $dist->summary($content);
         }
 
-        $dist->description($head1->content) if $title eq 'DESCRIPTION';
+        $dist->description( $head1->content->[0] ) if $title eq 'DESCRIPTION';
     }
 
 
