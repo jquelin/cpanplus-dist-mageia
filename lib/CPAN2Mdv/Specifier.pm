@@ -39,10 +39,9 @@ sub _onpub_task {
     my $url  = $dist->url;
     $k->post( 'journal', 'log', "task: $name-$vers\n" );
 
-    my $pkg = "perl-$name";
+    my $pkg = $dist->pkgname;
     my $spec = "$ENV{HOME}/rpm/SPECS/$pkg.spec";
     $dist->specfile($spec);
-    $dist->pkgname($pkg);
 
     unlink $spec;
     my $template = $h->{conf}{specifier}{template};

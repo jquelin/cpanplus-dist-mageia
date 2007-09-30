@@ -60,6 +60,11 @@ sub _onpub_task {
 
     $tree->delete;
 
+    # 
+    my $pkg = "perl-$name";
+    # FIXME: long rpm names (perl-Catalyst-P-A-Store-LDAP)
+    $dist->pkgname($pkg);
+
     $k->post( 'journal', 'log', "done: $name-$vers\n" );
     $k->post( 'main', 'collector_done', $dist );
 }
