@@ -25,6 +25,7 @@ my $conf = Config::Tiny->read( $ARGV{-config} );
 die "Couldn't find a suitable configuration file.\n(Try: $0 --help)\n"
     unless defined $conf;
 
+$ENV{LC_ALL} = 'C'; # force english locale
 
 # create main session.
 POE::Session->create(
