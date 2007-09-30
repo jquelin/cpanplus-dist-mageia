@@ -56,6 +56,7 @@ sub _onpub_task {
     $url = "http://search.cpan.org$url";
     $dist->url($url);
 
+    # FIXME: summary, license, description
 
     $tree->delete;
 
