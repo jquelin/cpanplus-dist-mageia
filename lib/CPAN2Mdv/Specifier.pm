@@ -34,11 +34,18 @@ sub spawn {
 sub _onpub_task {
     my ($k, $h, $dist) = @_[KERNEL, HEAP, ARG0];
 
+    # FIXME: bump Release if previously existing spec file for the same
+    # version
+
     my $name    = $dist->name;
     my $vers    = $dist->version;
     my $summary = $dist->summary;
     my $descr   = $dist->description;
     my $url     = $dist->url;
+    my $requires =
+        join "\n",
+        map { "Requires: perl($_)" }
+        @{ $dist->requires };
     my $build_requires =
         join "\n",
         map { "BuildRequires: perl($_)" }
@@ -70,6 +77,7 @@ sub _onpub_task {
         $line =~ s/DISTVERS/$vers/;
         $line =~ s/DISTSUMMARY/$summary/;
         $line =~ s/DISTURL/$url/;
+        $line =~ s/DISTREQUIRES/$requires/;
         $line =~ s/DISTBUILDREQUIRES/$build_requires/;
         $line =~ s/DISTDESCR/$descr/;
         $line =~ s/DISTDOC/@docfiles ? "%doc @docfiles" : ''/e;
