@@ -122,23 +122,6 @@ sub _onpriv_start {
 }
 
 
-#
-# resolve distrib (audio::mpd::collection -> audio-mpd) Resolver
-#    v
-# resolve to tarball (including version) + metadata  InfoCollecter
-#    v
-# download tarball   Downloader
-#    v
-# resolve rpm name + create spec file Specifier
-#    v
-# build rpm   Builder     > report error, reschedule
-#    v
-# install rpm Installer   > report error
-#    v
-# upload rpm to mdv Uploader
-#
-#
-# journal
 # cpan rss listener
 # cpan walker / mdv
 #
