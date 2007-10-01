@@ -76,6 +76,20 @@ sub _onpriv_build_completed {
         # oops, there were some errors.
         my $name = $dist->name;
 
+        if ( $out =~ /^error: Failed build dependencies:\n(.*)\z/ms ) {
+            # additional modules to be packaged.
+            my $wanted = $1;
+            my @modules;
+            foreach my $m ( $wanted =~ /perl\((.+?)\)/g ) {
+                my $new = CPAN2Mdv::Dist->new({module=>$m, is_prereq=>$dist});
+                $k->post( 'main', 'need_module', $new );
+                # FIXME: keep track of all dependencies for a module
+                push @modules, $m;
+            }
+            $k->post( 'journal', 'log', "hold: $name needs " . join(',', @modules) . "\n" );
+            return;
+        }
+
         if ( $out =~ /Can't locate (\S+)\.pm in \@INC/ ) {
             # missing prereq.
             my $prereq = $1; $prereq =~ s!/!::!g;
@@ -106,8 +120,8 @@ sub _onpriv_build_completed {
     }
 
     my $pkgname = $dist->pkgname;
-    my $rpm  = glob "$ENV{HOME}/rpm/RPMS/*/$pkgname-*.rpm";
-    my $srpm = glob "$ENV{HOME}/rpm/SRPMS/$pkgname-*.src.rpm";
+    my ($rpm)  = glob "$ENV{HOME}/rpm/RPMS/*/$pkgname-*.rpm";
+    my ($srpm) = glob "$ENV{HOME}/rpm/SRPMS/$pkgname-*.src.rpm";
     $dist->rpm( $rpm );
     $dist->srpm( $srpm );
     $k->post( 'journal', 'log', "done: $srpm\n" );
