@@ -1,0 +1,15 @@
+Revision history for CPANPLUS-Dist-Mdv
+
+High-level changelog
+====================
+
+0.1.x  initial release
+
+
+Low-level changelog
+===================
+
+0.1.0 Thu Oct 18 20:02:52 CEST 2007
+ - initial release: format_available, and rough init / prepare / create
+   methods
+
