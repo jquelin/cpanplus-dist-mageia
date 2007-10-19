@@ -369,7 +369,7 @@ CPANPLUS::Dist::Mdv - a cpanplus backend to build mandriva rpms
 =head1 DESCRIPTION
 
 CPANPLUS::Dist::Mdv is a distribution class to create mandriva packages
-from CPAN modules, and all it's dependencies. This allows you to have
+from CPAN modules, and all its dependencies. This allows you to have
 the most recent copies of CPAN modules installed, using your package
 manager of choice, but without having to wait for central repositories
 to be updated.
@@ -411,7 +411,36 @@ all the needed status accessors.
 Called automatically whenever you create a new C<CPANPLUS::Dist> object.
 
 
-=head2 prepare;
+=head2 $boot = $mdv->prepare;
+
+Prepares a distribution for creation. This means it will create the rpm
+spec file needed to build the rpm and source rpm. This will also satisfy
+any prerequisites the module may have.
+
+Returns true on success and false on failure.
+
+You may then call C<< $mdv->create >> on the object to create the rpm
+from the spec file, and then C<< $mdv->install >> on the object to
+actually install it.
+
+
+=head2 $bool = $mdv->create;
+
+Builds the rpm file from the spec file created during the C<create()>
+step.
+
+Returns true on success and false on failure.
+
+You may then call C<< $mdv->install >> on the object to actually install it.
+
+
+=head2 $bool = $mdv->install;
+
+Installs the rpm using C<rpm -U>.
+
+B</!\ Work in progress: not implemented.>
+
+Returns true on success and false on failure
 
 
 
