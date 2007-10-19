@@ -24,10 +24,14 @@ my $builder = Module::Build->new (
     build_requires => {
         perl              => '5.008',
         'CPANPLUS'        => 0,
+        'IPC::Cmd'        => 0,
+        'Readonly'        => 0,
         'Test::More'      => 0,
     },
     requires       => {
         'CPANPLUS'        => 0,
+        'IPC::Cmd'        => 0,
+        'Readonly'        => 0,
     },
 );
 
