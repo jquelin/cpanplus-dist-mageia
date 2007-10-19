@@ -19,7 +19,7 @@ use File::Copy      qw[ copy ];
 use IPC::Cmd        qw[ run can_run ];
 use Readonly;
 
-our $VERSION = '0.1.0';
+our $VERSION = '0.1.1';
 
 Readonly my $DATA_OFFSET => tell(DATA);
 Readonly my $HOME => $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7];
