@@ -1,0 +1,60 @@
+CPANPLUS::Dist::Mdv
+===================
+
+CPANPLUS::Dist::Mdv is a distribution class to create mandriva packages
+from CPAN modules, and all its dependencies. This allows you to have
+the most recent copies of CPAN modules installed, using your package
+manager of choice, but without having to wait for central repositories
+to be updated.
+
+You can either install them using the API provided in this package, or
+manually via rpm.
+
+
+
+INSTALLATION
+============
+
+To install this module, run the following commands:
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
+
+Or, using Module::Builder:
+
+    perl Build.PL
+    ./Build
+    ./Build test
+    ./Build install
+
+
+
+SUPPORT AND DOCUMENTATION
+=========================
+
+After installing, you can find documentation for this module with the perldoc command.
+
+    perldoc CPANPLUS::Dist::Mdv
+
+You can also look for information at:
+  . Search CPAN
+        http://search.cpan.org/dist/CPANPLUS-Dist-Mdv
+  . CPAN Request Tracker:
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPANPLUS-Dist-Mdv
+  . AnnoCPAN, annotated CPAN documentation:
+        http://annocpan.org/dist/CPANPLUS-Dist-Mdv
+  . CPAN Ratings:
+        http://cpanratings.perl.org/d/CPANPLUS-Dist-Mdv
+
+
+
+COPYRIGHT AND LICENCE
+=====================
+
+Copyright (c) 2007 Jerome Quelin, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
