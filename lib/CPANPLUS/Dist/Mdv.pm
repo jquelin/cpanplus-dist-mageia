@@ -150,6 +150,7 @@ sub prepare {
         }
 
         msg( '--force in use, rebuilding anyway' );
+        # FIXME: bump rpm version
     }
 
     # compute & store path of specfile.
@@ -230,7 +231,7 @@ sub create {
 
     # check if the dry-run finished correctly
     if ( $success ) {
-        my ($rpm)  = glob "$RPMDIR/RPMS/*/$rpmname-*.rpm";
+        my ($rpm)  = glob "$RPMDIR/RPMS/*/$rpmname-*.rpm"; # FIXME: may be multiple rpms
         my ($srpm) = glob "$RPMDIR/SRPMS/$rpmname-*.src.rpm";
         msg( "rpm created successfully: $rpm" );
         msg( "srpm available: $srpm" );
@@ -250,6 +251,7 @@ sub create {
     }
 
     msg( "extra files installed, fixing spec file" );
+    # FIXME: change spec file
     # additional files to be packaged
     #my $files = $1;
     #$files =~ s/^\s+//mg; # remove spaces
