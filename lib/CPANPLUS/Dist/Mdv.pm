@@ -160,7 +160,10 @@ sub prepare {
 
     # writing the spec file.
     seek DATA, $DATA_OFFSET, 0;
-    open my $specfh, '>', $spec or die "can't open '$spec': $!";
+    if ( not open my $specfh, '>', $spec ) {
+        error( "can't open '$spec': $!" );
+        return;
+    }
     while ( defined( my $line = <DATA> ) ) {
         last if $line =~ /^__END__$/;
 
