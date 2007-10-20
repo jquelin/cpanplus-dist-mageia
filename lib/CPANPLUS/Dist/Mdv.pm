@@ -23,7 +23,7 @@ our $VERSION = '0.1.1';
 
 Readonly my $DATA_OFFSET => tell(DATA);
 Readonly my $HOME   => $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7];
-Readonly my $RPMDIR => "$RPMDIR";
+Readonly my $RPMDIR => "$HOME/rpm";
 
 
 #--
