@@ -22,7 +22,8 @@ use Readonly;
 our $VERSION = '0.1.1';
 
 Readonly my $DATA_OFFSET => tell(DATA);
-Readonly my $HOME => $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7];
+Readonly my $HOME   => $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7];
+Readonly my $RPMDIR => "$RPMDIR";
 
 
 #--
@@ -44,12 +45,12 @@ sub format_available {
     my $flag;
 
     # check rpm tree structure
-    if ( ! -d "$HOME/rpm" ) {
+    if ( ! -d $RPMDIR ) {
         error( 'need to create rpm tree structure in your home' );
         return;
     }
     foreach my $subdir ( qw[ BUILD RPMS SOURCES SPECS SRPMS tmp ] ) {
-        my $dir = "$HOME/rpm/$subdir";
+        my $dir = "$RPMDIR/$subdir";
         next if -d $dir;
         error( "missing directory '$dir'" );
         $flag++;
@@ -80,10 +81,10 @@ sub init {
     # distname: Foo-Bar
     # distvers: 1.23
     # rpmname:  perl-Foo-Bar
-    # rpm:      $HOME/rpm/RPMS/noarch/perl-Foo-Bar-1.23-1mdv2008.0.noarch.rpm
-    # srpm:     $HOME/rpm/SRPMS/perl-Foo-Bar-1.23-1mdv2008.0.src.rpm
+    # rpm:      $RPMDIR/RPMS/noarch/perl-Foo-Bar-1.23-1mdv2008.0.noarch.rpm
+    # srpm:     $RPMDIR/SRPMS/perl-Foo-Bar-1.23-1mdv2008.0.src.rpm
     # rpmvers:  1
-    # specpath: $HOME/rpm/SPECS/perl-Foo-Bar.spec
+    # specpath: $RPMDIR/SPECS/perl-Foo-Bar.spec
     $status->mk_accessors(qw[ distname distvers rpmname rpm
         rpmvers srpm specpath ]);
 
@@ -152,7 +153,7 @@ sub prepare {
     }
 
     # compute & store path of specfile.
-    my $spec = "$HOME/rpm/SPECS/$rpmname.spec";
+    my $spec = "$RPMDIR/SPECS/$rpmname.spec";
     $status->specpath($spec);
 
     my $vers = $module->version;
@@ -184,7 +185,7 @@ sub prepare {
 
     # copy package.
     my $basename = basename $module->status->fetch;
-    my $tarball = "$HOME/rpm/SOURCES/$basename";
+    my $tarball = "$RPMDIR/SOURCES/$basename";
     copy( $module->status->fetch, $tarball );
 
     # return success
@@ -229,8 +230,8 @@ sub create {
 
     # check if the dry-run finished correctly
     if ( $success ) {
-        my ($rpm)  = glob "$HOME/rpm/RPMS/*/$rpmname-*.rpm";
-        my ($srpm) = glob "$HOME/rpm/SRPMS/$rpmname-*.src.rpm";
+        my ($rpm)  = glob "$RPMDIR/RPMS/*/$rpmname-*.rpm";
+        my ($srpm) = glob "$RPMDIR/SRPMS/$rpmname-*.src.rpm";
         msg( "rpm created successfully: $rpm" );
         msg( "srpm available: $srpm" );
         $status->rpm($rpm);
