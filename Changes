@@ -9,6 +9,10 @@ High-level changelog
 Low-level changelog
 ===================
 
+0.1.2 Sat Oct 20 12:36:16 CEST 2007
+ - taking jos boumans' input into account
+ - fixing name of spec file (using distname instead of module name)
+
 0.1.1 Fri Oct 19 13:28:02 CEST 2007
  - fixing missing prereqs in build scripts
 
