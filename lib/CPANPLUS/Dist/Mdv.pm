@@ -97,7 +97,7 @@ sub prepare {
     # note: we're also running create + install at this stage to know
     # the list of files to be installed. indeed, this will be needed for
     # the specfile creation.
-    $self->SUPER::prepare( %args, verbose=>0 );
+    $self->SUPER::prepare( %args );
 
     my $status = $self->status;               # private hash
     my $module = $self->parent;               # CPANPLUS::Module
