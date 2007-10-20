@@ -411,7 +411,7 @@ all the needed status accessors.
 Called automatically whenever you create a new C<CPANPLUS::Dist> object.
 
 
-=head2 $boot = $mdv->prepare;
+=head2 $bool = $mdv->prepare;
 
 Prepares a distribution for creation. This means it will create the rpm
 spec file needed to build the rpm and source rpm. This will also satisfy
