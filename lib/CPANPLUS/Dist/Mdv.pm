@@ -129,7 +129,7 @@ sub prepare {
         map { basename $_ }
         @{ $module->status->files };
 
-    my $rpmname = _mk_pkg_name($module);
+    my $rpmname = _mk_pkg_name($distname);
     $status->rpmname( $rpmname );
 
 
@@ -160,7 +160,8 @@ sub prepare {
 
     # writing the spec file.
     seek DATA, $DATA_OFFSET, 0;
-    if ( not open my $specfh, '>', $spec ) {
+    my $specfh;
+    if ( not open $specfh, '>', $spec ) {
         error( "can't open '$spec': $!" );
         return;
     }
@@ -290,15 +291,15 @@ sub _has_been_build {
 # private subs
 
 #
-# my $name = _mk_pkg_name($module);
+# my $name = _mk_pkg_name($dist);
 #
-# given the CPANPLUS::Module object $module, return the name of the
-# mandriva rpm package.
+# given a distribution name, return the name of the mandriva rpm
+# package. in most cases, it will be the same, but some pakcage name
+# will be too long as a rpm name: we'll have to cut it.
 #
 sub _mk_pkg_name {
-    my ($module) = @_;
-    my $name = 'perl-' . $module->module;
-    $name =~ s/::/-/g;
+    my ($dist) = @_;
+    my $name = 'perl-' . $dist;
     return $name;
 }
 
@@ -318,7 +319,7 @@ Summary:    DISTSUMMARY
 Source0:    DISTURL
 Url:		http://search.cpan.org/dist/%{realname}
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires:	perl-devel
+BuildRequires: perl-devel
 DISTBUILDREQUIRES
 DISTREQUIRES
 
