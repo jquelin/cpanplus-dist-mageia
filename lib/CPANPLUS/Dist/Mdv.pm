@@ -38,7 +38,7 @@ sub format_available {
     # check mandriva release file
     if ( ! -f '/etc/mandriva-release' ) {
         error( 'not on a mandriva system' );
-        return 0;
+        return;
     }
 
     my $flag;
@@ -46,7 +46,7 @@ sub format_available {
     # check rpm tree structure
     if ( ! -d "$HOME/rpm" ) {
         error( 'need to create rpm tree structure in your home' );
-        return 0;
+        return;
     }
     foreach my $subdir ( qw[ BUILD RPMS SOURCES SPECS SRPMS tmp ] ) {
         my $dir = "$HOME/rpm/$subdir";
@@ -244,7 +244,7 @@ sub create {
     if ( not $buffer =~ /^\s+Installed .but unpackaged. file.s. found:\n(.*)\z/ms ) {
         error( "failed to create mandriva package for '$distname': $buffer" );
         $status->created(0);
-        return 0;
+        return;
     }
 
     msg( "extra files installed, fixing spec file" );
