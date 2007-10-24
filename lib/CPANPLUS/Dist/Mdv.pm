@@ -198,7 +198,7 @@ sub prepare {
 sub create {
     my ($self, %args) = @_;
 
-    $self->SUPER::create( %args, verbose=>0 );
+    $self->SUPER::create( %args );
 
     my $status = $self->status;               # private hash
     my $module = $self->parent;               # CPANPLUS::Module
