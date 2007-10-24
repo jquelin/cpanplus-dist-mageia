@@ -93,13 +93,6 @@ sub init {
 
 sub prepare {
     my ($self, %args) = @_;
-
-    # dry-run with makemaker: handles prereqs, .
-    # note: we're also running create + install at this stage to know
-    # the list of files to be installed. indeed, this will be needed for
-    # the specfile creation.
-    $self->SUPER::prepare( %args );
-
     my $status = $self->status;               # private hash
     my $module = $self->parent;               # CPANPLUS::Module
     my $intern = $module->parent;             # CPANPLUS::Internals
@@ -113,6 +106,10 @@ sub prepare {
         verbose => $conf->get_conf('verbose'),
         %args,
     );
+
+    # dry-run with makemaker: find build prereqs.
+    msg( "dry-run prepare with makemaker..." );
+    $self->SUPER::prepare( %args );
 
     # compute & store package information
     my $distname    = $module->package_name;
@@ -140,7 +137,7 @@ sub prepare {
         msg( "already created package for '$modname' at '$pkg'" );
 
         if ( not $opts{force} ) {
-            msg( "won't rebuild package since --force isn't in use" );
+            msg( "won't re-spec package since --force isn't in use" );
             # c::d::mdv store
             $status->rpmpath($pkg); # store the path of rpm
             # cpanplus api
@@ -151,8 +148,10 @@ sub prepare {
             # XXX check if it works
         }
 
-        msg( '--force in use, rebuilding anyway' );
+        msg( '--force in use, re-specing anyway' );
         # FIXME: bump rpm version
+    } else {
+        msg( "writing specfile for '$distname'..." );
     }
 
     # compute & store path of specfile.
@@ -160,7 +159,6 @@ sub prepare {
     $status->specpath($spec);
 
     my $vers = $module->version;
-    msg($vers);
 
     # writing the spec file.
     seek DATA, $DATA_OFFSET, 0;
@@ -191,6 +189,7 @@ sub prepare {
     my $tarball = "$RPMDIR/SOURCES/$basename";
     copy( $module->status->fetch, $tarball );
 
+    msg( "specfile for '$distname' written" );
     # return success
     $status->prepared(1);
     return 1;
@@ -199,9 +198,6 @@ sub prepare {
 
 sub create {
     my ($self, %args) = @_;
-
-    $self->SUPER::create( %args );
-
     my $status = $self->status;               # private hash
     my $module = $self->parent;               # CPANPLUS::Module
     my $intern = $module->parent;             # CPANPLUS::Internals
@@ -216,9 +212,25 @@ sub create {
         %args,
     );
 
+    # check if we need to rebuild package.
+    if ( $status->created && defined $status->dist ) {
+        if ( not $opts{force} ) {
+            msg( "won't re-build package since --force isn't in use" );
+            return $status->dist;
+        }
+        msg( '--force in use, re-building anyway' );
+    }
+
+    # dry-run with makemaker: handle prereqs.
+    msg( "dry-run build with makemaker..." );
+    $self->SUPER::create( %args );
+
+
     my $spec     = $status->specpath;
     my $distname = $status->distname;
     my $rpmname  = $status->rpmname;
+
+    msg( "building '$distname' from specfile..." );
 
     # dry-run, to see if we forgot some files
     my ($buffer, $success);
