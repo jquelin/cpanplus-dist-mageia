@@ -81,12 +81,12 @@ sub init {
     # distname: Foo-Bar
     # distvers: 1.23
     # rpmname:  perl-Foo-Bar
-    # rpm:      $RPMDIR/RPMS/noarch/perl-Foo-Bar-1.23-1mdv2008.0.noarch.rpm
-    # srpm:     $RPMDIR/SRPMS/perl-Foo-Bar-1.23-1mdv2008.0.src.rpm
+    # rpmpath:  $RPMDIR/RPMS/noarch/perl-Foo-Bar-1.23-1mdv2008.0.noarch.rpm
     # rpmvers:  1
+    # srpmpath: $RPMDIR/SRPMS/perl-Foo-Bar-1.23-1mdv2008.0.src.rpm
     # specpath: $RPMDIR/SPECS/perl-Foo-Bar.spec
-    $status->mk_accessors(qw[ distname distvers rpmname rpm
-        rpmvers srpm specpath ]);
+    $status->mk_accessors(qw[ distname distvers rpmname rpmpath
+        rpmvers srpmpath specpath ]);
 
     return 1;
 }
@@ -135,15 +135,17 @@ sub prepare {
 
 
     # check whether package has been build.
-    if ( my $pkg = $self->_has_been_build ) {
+    if ( my $pkg = $self->_has_been_build($rpmname, $distvers) ) {
         my $modname = $module->module;
         msg( "already created package for '$modname' at '$pkg'" );
 
         if ( not $opts{force} ) {
             msg( "won't rebuild package since --force isn't in use" );
+            # c::d::mdv store
+            $status->rpmpath($pkg); # store the path of rpm
+            # cpanplus api
             $status->prepared(1);
             $status->created(1);
-            $status->pkgpath($pkg);
             $status->dist($pkg);
             return $pkg;
             # XXX check if it works
@@ -235,17 +237,19 @@ sub create {
         my ($srpm) = glob "$RPMDIR/SRPMS/$rpmname-*.src.rpm";
         msg( "rpm created successfully: $rpm" );
         msg( "srpm available: $srpm" );
-        $status->rpm($rpm);
-        $status->srpm($srpm);
-        $status->dist($rpm);
+        # c::d::mdv store
+        $status->rpmpath($rpm);
+        $status->srpmpath($srpm);
+        # cpanplus api
         $status->created(1);
-
-        return 1;
+        $status->dist($rpm);
+        return $rpm;
     }
 
     # unknown error, aborting.
     if ( not $buffer =~ /^\s+Installed .but unpackaged. file.s. found:\n(.*)\z/ms ) {
         error( "failed to create mandriva package for '$distname': $buffer" );
+        # cpanplus api
         $status->created(0);
         return;
     }
@@ -281,12 +285,10 @@ sub install {
 # return true if there's already a package build for this module.
 # 
 sub _has_been_build {
-    my ($self) = @_;
-
-    my $name = $self->status->rpmname;
-    my $vers = $self->parent->version;  # module version
-    #return "/home/jquelin/rpm/RPMS/noarch/perl-POE-Component-Client-Keepalive-0.1000-1mdv2008.0.noarch.rpm";
-    return 0; # FIXME do some real checks, including cooker.
+    my ($self, $name, $vers) = @_;
+    my $pkg = ( sort glob "$RPMDIR/RPMS/*/$name-$vers-*.rpm" )[-1];
+    return $pkg;
+    # FIXME: should we check cooker?
 }
 
 
