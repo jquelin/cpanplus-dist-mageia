@@ -222,58 +222,62 @@ sub create {
         msg( '--force in use, re-building anyway' );
     }
 
-    # dry-run with makemaker: handle prereqs.
-    msg( "dry-run build with makemaker..." );
-    $self->SUPER::create( %args );
+    RPMBUILD: {
+        # dry-run with makemaker: handle prereqs.
+        msg( 'dry-run build with makemaker...' );
+        $self->SUPER::create( %args );
 
 
-    my $spec     = $status->specpath;
-    my $distname = $status->distname;
-    my $rpmname  = $status->rpmname;
+        my $spec     = $status->specpath;
+        my $distname = $status->distname;
+        my $rpmname  = $status->rpmname;
 
-    msg( "building '$distname' from specfile..." );
+        msg( "building '$distname' from specfile..." );
 
-    # dry-run, to see if we forgot some files
-    my ($buffer, $success);
-    DRYRUN: {
-        local $ENV{LC_ALL} = 'C';
-        $success = run(
-            command => "rpmbuild -ba $spec",
-            verbose => $opts{verbose},
-            buffer  => \$buffer,
-        );
+        # dry-run, to see if we forgot some files
+        my ($buffer, $success);
+        DRYRUN: {
+            local $ENV{LC_ALL} = 'C';
+            $success = run(
+                command => "rpmbuild -ba $spec",
+                verbose => $opts{verbose},
+                buffer  => \$buffer,
+            );
+        }
+
+        # check if the dry-run finished correctly
+        if ( $success ) {
+            my ($rpm)  = glob "$RPMDIR/RPMS/*/$rpmname-*.rpm"; # FIXME: may be multiple rpms
+            my ($srpm) = glob "$RPMDIR/SRPMS/$rpmname-*.src.rpm";
+            msg( "rpm created successfully: $rpm" );
+            msg( "srpm available: $srpm" );
+            # c::d::mdv store
+            $status->rpmpath($rpm);
+            $status->srpmpath($srpm);
+            # cpanplus api
+            $status->created(1);
+            $status->dist($rpm);
+            return $rpm;
+        }
+
+        # unknown error, aborting.
+        if ( not $buffer =~ /^\s+Installed .but unpackaged. file.s. found:\n(.*)\z/ms ) {
+            error( "failed to create mandriva package for '$distname': $buffer" );
+            # cpanplus api
+            $status->created(0);
+            return;
+        }
+
+        # additional files to be packaged
+        msg( "extra files installed, fixing spec file" );
+        my $files = $1;
+        $files =~ s/^\s+//mg; # remove spaces
+        my @files = split /\n/, $files;
+        $status->extra_files( \@files );
+        $self->prepare( %opts, force => 1 );
+        msg( 'restarting build phase' );
+        redo RPMBUILD;
     }
-
-    # check if the dry-run finished correctly
-    if ( $success ) {
-        my ($rpm)  = glob "$RPMDIR/RPMS/*/$rpmname-*.rpm"; # FIXME: may be multiple rpms
-        my ($srpm) = glob "$RPMDIR/SRPMS/$rpmname-*.src.rpm";
-        msg( "rpm created successfully: $rpm" );
-        msg( "srpm available: $srpm" );
-        # c::d::mdv store
-        $status->rpmpath($rpm);
-        $status->srpmpath($srpm);
-        # cpanplus api
-        $status->created(1);
-        $status->dist($rpm);
-        return $rpm;
-    }
-
-    # unknown error, aborting.
-    if ( not $buffer =~ /^\s+Installed .but unpackaged. file.s. found:\n(.*)\z/ms ) {
-        error( "failed to create mandriva package for '$distname': $buffer" );
-        # cpanplus api
-        $status->created(0);
-        return;
-    }
-
-    # additional files to be packaged
-    msg( "extra files installed, fixing spec file" );
-    my $files = $1;
-    $files =~ s/^\s+//mg; # remove spaces
-    my @files = split /\n/, $files;
-    $status->extra_files( \@files );
-    $self->prepare( %opts, force => 1 );
 }
 
 sub install {
