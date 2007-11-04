@@ -179,7 +179,7 @@ sub prepare {
         $line =~ s/DISTREQUIRES/$distreqs/;
         #$line =~ s/DISTDESCR/$distdescr/;
         $line =~ s/DISTDOC/@docfiles ? "%doc @docfiles" : ''/e;
-        #$line =~ s/DISTEXTRA/join( "\n", @{ $dist->extra_files || [] })/e;
+        $line =~ s/DISTEXTRA/join( "\n", @{ $status->extra_files || [] })/e;
 
         print $specfh $line;
     }
@@ -366,7 +366,7 @@ rm -rf $RPM_BUILD_ROOT
 DISTDOC
 %{_mandir}
 %perl_vendorlib
-#DISTEXTRA
+DISTEXTRA
 
 
 %changelog
