@@ -247,8 +247,8 @@ sub create {
 
         # check if the dry-run finished correctly
         if ( $success ) {
-            my ($rpm)  = glob "$RPMDIR/RPMS/*/$rpmname-*.rpm"; # FIXME: may be multiple rpms
-            my ($srpm) = glob "$RPMDIR/SRPMS/$rpmname-*.src.rpm";
+            my ($rpm)  = (sort glob "$RPMDIR/RPMS/*/$rpmname-*.rpm")[-1];
+            my ($srpm) = (sort glob "$RPMDIR/SRPMS/$rpmname-*.src.rpm")[-1];
             msg( "rpm created successfully: $rpm" );
             msg( "srpm available: $srpm" );
             # c::d::mdv store
