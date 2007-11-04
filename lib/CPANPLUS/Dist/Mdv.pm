@@ -80,12 +80,13 @@ sub init {
     my $status = $self->status; # an Object::Accessor
     # distname: Foo-Bar
     # distvers: 1.23
+    # extra_files: qw[ /bin/foo /usr/bin/bar ] 
     # rpmname:  perl-Foo-Bar
     # rpmpath:  $RPMDIR/RPMS/noarch/perl-Foo-Bar-1.23-1mdv2008.0.noarch.rpm
     # rpmvers:  1
     # srpmpath: $RPMDIR/SRPMS/perl-Foo-Bar-1.23-1mdv2008.0.src.rpm
     # specpath: $RPMDIR/SPECS/perl-Foo-Bar.spec
-    $status->mk_accessors(qw[ distname distvers rpmname rpmpath
+    $status->mk_accessors(qw[ distname distvers extra_files rpmname rpmpath
         rpmvers srpmpath specpath ]);
 
     return 1;
@@ -269,12 +270,10 @@ sub create {
     msg( "extra files installed, fixing spec file" );
     # FIXME: change spec file
     # additional files to be packaged
-    #my $files = $1;
-    #$files =~ s/^\s+//mg; # remove spaces
-    #my @files = split /\n/, $files;
-    #$dist->extra_files( \@files );
-
-
+    my $files = $1;
+    $files =~ s/^\s+//mg; # remove spaces
+    my @files = split /\n/, $files;
+    $status->extra_files( \@files );
 }
 
 sub install {
