@@ -267,13 +267,13 @@ sub create {
         return;
     }
 
-    msg( "extra files installed, fixing spec file" );
-    # FIXME: change spec file
     # additional files to be packaged
+    msg( "extra files installed, fixing spec file" );
     my $files = $1;
     $files =~ s/^\s+//mg; # remove spaces
     my @files = split /\n/, $files;
     $status->extra_files( \@files );
+    $self->prepare( %opts, force => 1 );
 }
 
 sub install {
