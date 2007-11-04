@@ -9,6 +9,7 @@ High-level changelog
 Low-level changelog
 ===================
 
+0.2.0 Sun Nov  4 17:41:46 CET 2007
  - fixing spec-file when missing files detected by rpmbuild
  - rpmbuild now quiet for better output
  - fixing test on windows
