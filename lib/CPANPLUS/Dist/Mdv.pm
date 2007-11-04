@@ -239,7 +239,7 @@ sub create {
         DRYRUN: {
             local $ENV{LC_ALL} = 'C';
             $success = run(
-                command => "rpmbuild -ba $spec",
+                command => "rpmbuild -ba --quiet $spec",
                 verbose => $opts{verbose},
                 buffer  => \$buffer,
             );

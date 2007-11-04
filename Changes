@@ -9,6 +9,11 @@ High-level changelog
 Low-level changelog
 ===================
 
+ - fixing spec-file when missing files detected by rpmbuild
+ - rpmbuild now quiet for better output
+ - fixing test on windows
+ - fixing case where more than one rpm / srpm found
+
 0.1.3 Wed Oct 24 18:46:01 CEST 2007
  - reordered calls to makemaker
  - don't rebuild rpm unless needed (or forced)
