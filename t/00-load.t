@@ -11,14 +11,8 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More tests => 1;
 
-if( $^O ne 'linux' ) {
-    plan skip_all => 'Test irrelevant on non-Linux';
-    exit;
-}
-
-plan tests => 1;
 require_ok( 'CPANPLUS::Dist::Mdv' );
 diag( "Testing CPANPLUS::Dist::Mdv $CPANPLUS::Dist::Mdv::VERSION, Perl $], $^X" );
 
