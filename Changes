@@ -10,7 +10,7 @@ High-level changelog
 Low-level changelog
 ===================
 
-0.2.1
+0.2.1 Mon Nov  5 18:33:13 CET 2007
  - using File::HomeDir instead of computing ourselves $HOME
  - removed YAML usage (was here for debugging purpose)
 
