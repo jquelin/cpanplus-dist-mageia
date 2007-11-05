@@ -282,7 +282,6 @@ sub create {
 
 sub install {
     my ($self, %args) = @_;
-    use YAML; msg( Dump($self) );
     my $rpm = $self->status->rpm;
     error( "installing $rpm" );
     die;
