@@ -16,14 +16,14 @@ use base 'CPANPLUS::Dist::Base';
 use CPANPLUS::Error; # imported subs: error(), msg()
 use File::Basename;
 use File::Copy      qw[ copy ];
+use File::HomeDir;
 use IPC::Cmd        qw[ run can_run ];
 use Readonly;
 
 our $VERSION = '0.2.0';
 
 Readonly my $DATA_OFFSET => tell(DATA);
-Readonly my $HOME   => $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7];
-Readonly my $RPMDIR => "$HOME/rpm";
+Readonly my $RPMDIR      => File::HomeDir->my_home . '/rpm';
 
 
 #--
