@@ -21,6 +21,7 @@ WriteMakefile(
     PL_FILES            => {},
     PREREQ_PM => {
         'CPANPLUS'        => 0,
+        'File::HomeDir'   => 0,
         'IPC::Cmd'        => 0,
         'Readonly'        => 0,
         'Test::More'      => 0,
