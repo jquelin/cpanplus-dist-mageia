@@ -119,6 +119,7 @@ sub prepare {
     #my $distsummary    = 
     #my $distdescr      = 
     #my $distlicense    =
+    my ($disttoplevel) = $module->name=~ /([^:]+)::/;
     my $disturl        = $module->package;
     my @reqs           = sort keys %{ $module->status->prereqs };
     my $distbreqs      = join "\n", map { "BuildRequires: perl($_)" } @reqs;
@@ -177,6 +178,7 @@ sub prepare {
         $line =~ s/DISTBUILDREQUIRES/$distbreqs/;
         #$line =~ s/DISTDESCR/$distdescr/;
         $line =~ s/DISTDOC/@docfiles ? "%doc @docfiles" : ''/e;
+        $line =~ s/DISTTOPLEVEL/$disttoplevel/;
         $line =~ s/DISTEXTRA/join( "\n", @{ $status->extra_files || [] })/e;
 
         print $specfh $line;
@@ -365,7 +367,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 DISTDOC
 %{_mandir}/man3/*
-%perl_vendorlib
+%perl_vendorlib/DISTTOPLEVEL
 DISTEXTRA
 
 
