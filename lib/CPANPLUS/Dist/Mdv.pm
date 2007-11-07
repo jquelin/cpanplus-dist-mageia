@@ -20,7 +20,7 @@ use File::HomeDir;
 use IPC::Cmd        qw[ run can_run ];
 use Readonly;
 
-our $VERSION = '0.2.1';
+our $VERSION = '0.2.2';
 
 Readonly my $DATA_OFFSET => tell(DATA);
 Readonly my $RPMDIR      => File::HomeDir->my_home . '/rpm';

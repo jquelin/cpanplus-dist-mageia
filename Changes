@@ -10,10 +10,13 @@ High-level changelog
 Low-level changelog
 ===================
 
+0.2.2 Wed Nov  7 19:09:50 CET 2007
+ - taking guillomovitch's input into account
  - don't provide runtime requirements: rpmbuild will find them
  - restricting file inclusion:
      . prefer specific files instead of system manpage directory
      . including module top level
+ - providing full source url for easier updates later on
 
 0.2.1 Mon Nov  5 18:33:13 CET 2007
  - using File::HomeDir instead of computing ourselves $HOME
