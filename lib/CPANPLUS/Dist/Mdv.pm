@@ -121,7 +121,6 @@ sub prepare {
     #my $distlicense    =
     my $disturl        = $module->package;
     my @reqs           = sort keys %{ $module->status->prereqs };
-    my $distreqs       = join "\n", map { "Requires: perl($_)" } @reqs;
     my $distbreqs      = join "\n", map { "BuildRequires: perl($_)" } @reqs;
     my @docfiles =
         grep { /(README|Change(s|log)|LICENSE|META.yml)$/i }
@@ -176,7 +175,6 @@ sub prepare {
         #$line =~ s/DISTSUMMARY/$distsummary/;
         $line =~ s/DISTURL/$disturl/;
         $line =~ s/DISTBUILDREQUIRES/$distbreqs/;
-        $line =~ s/DISTREQUIRES/$distreqs/;
         #$line =~ s/DISTDESCR/$distdescr/;
         $line =~ s/DISTDOC/@docfiles ? "%doc @docfiles" : ''/e;
         $line =~ s/DISTEXTRA/join( "\n", @{ $status->extra_files || [] })/e;
@@ -340,7 +338,6 @@ Url:		http://search.cpan.org/dist/%{realname}
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: perl-devel
 DISTBUILDREQUIRES
-DISTREQUIRES
 
 BuildArch: noarch
 
