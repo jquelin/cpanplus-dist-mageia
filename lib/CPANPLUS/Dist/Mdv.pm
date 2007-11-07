@@ -364,7 +364,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 DISTDOC
-%{_mandir}
+%{_mandir}/man3/*
 %perl_vendorlib
 DISTEXTRA
 
