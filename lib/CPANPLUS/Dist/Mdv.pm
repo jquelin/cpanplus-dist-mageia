@@ -116,11 +116,11 @@ sub prepare {
     my $distname    = $module->package_name;
     $status->distname( $distname );
     my $distvers    = $module->package_version;
+    my $distext     = $module->package_extension;
     #my $distsummary    = 
     #my $distdescr      = 
     #my $distlicense    =
     my ($disttoplevel) = $module->name=~ /([^:]+)::/;
-    my $disturl        = $module->package;
     my @reqs           = sort keys %{ $module->status->prereqs };
     my $distbreqs      = join "\n", map { "BuildRequires: perl($_)" } @reqs;
     my @docfiles =
@@ -174,7 +174,7 @@ sub prepare {
         $line =~ s/DISTNAME/$distname/;
         $line =~ s/DISTVERS/$distvers/;
         #$line =~ s/DISTSUMMARY/$distsummary/;
-        $line =~ s/DISTURL/$disturl/;
+        $line =~ s/DISTEXTENSION/$distext/;
         $line =~ s/DISTBUILDREQUIRES/$distbreqs/;
         #$line =~ s/DISTDESCR/$distdescr/;
         $line =~ s/DISTDOC/@docfiles ? "%doc @docfiles" : ''/e;
@@ -328,14 +328,16 @@ sub _mk_pkg_name {
 __DATA__
 
 %define realname   DISTNAME
+%define version    DISTVERS
+%define release    %mkrel 1
 
 Name:       perl-%{realname}
-Version:    DISTVERS
-Release:    %mkrel 1
+Version:    %{version}
+Release:    %{release}
 License:    GPL or Artistic
 Group:      Development/Perl
 Summary:    DISTSUMMARY
-Source0:    DISTURL
+Source:     http://www.cpan.org/modules/by-module/DISTTOPLEVEL/%{realname}-%{version}.DISTEXTENSION
 Url:        http://search.cpan.org/dist/%{realname}
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: perl-devel

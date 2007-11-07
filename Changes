@@ -10,6 +10,11 @@ High-level changelog
 Low-level changelog
 ===================
 
+ - don't provide runtime requirements: rpmbuild will find them
+ - restricting file inclusion:
+     . prefer specific files instead of system manpage directory
+     . including module top level
+
 0.2.1 Mon Nov  5 18:33:13 CET 2007
  - using File::HomeDir instead of computing ourselves $HOME
  - removed YAML usage (was here for debugging purpose)
@@ -19,6 +24,8 @@ Low-level changelog
  - rpmbuild now quiet for better output
  - fixing test on windows
  - fixing case where more than one rpm / srpm found
+
+**
 
 0.1.3 Wed Oct 24 18:46:01 CEST 2007
  - reordered calls to makemaker
