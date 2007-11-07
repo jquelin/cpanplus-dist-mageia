@@ -327,15 +327,15 @@ __DATA__
 
 %define realname   DISTNAME
 
-Name:		perl-%{realname}
+Name:       perl-%{realname}
 Version:    DISTVERS
 Release:    %mkrel 1
-License:	GPL or Artistic
-Group:		Development/Perl
+License:    GPL or Artistic
+Group:      Development/Perl
 Summary:    DISTSUMMARY
 Source0:    DISTURL
-Url:		http://search.cpan.org/dist/%{realname}
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Url:        http://search.cpan.org/dist/%{realname}
+BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: perl-devel
 DISTBUILDREQUIRES
 
