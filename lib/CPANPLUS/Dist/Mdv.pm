@@ -516,6 +516,10 @@ Prepares a distribution for creation. This means it will create the rpm
 spec file needed to build the rpm and source rpm. This will also satisfy
 any prerequisites the module may have.
 
+Note that the spec file will be as accurate as possible. However, some
+fields may wrong (especially the description, and maybe the summary)
+since it relies on pod parsing to find those information.
+
 Returns true on success and false on failure.
 
 You may then call C<< $mdv->create >> on the object to create the rpm
