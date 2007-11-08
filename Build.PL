@@ -26,6 +26,7 @@ my $builder = Module::Build->new (
         'CPANPLUS'        => 0,
         'File::HomeDir'   => 0,
         'IPC::Cmd'        => 0,
+        'Pod::POM'        => 0,
         'Readonly'        => 0,
         'Test::More'      => 0,
     },
@@ -33,6 +34,7 @@ my $builder = Module::Build->new (
         'CPANPLUS'        => 0,
         'File::HomeDir'   => 0,
         'IPC::Cmd'        => 0,
+        'Pod::POM'        => 0,
         'Readonly'        => 0,
     },
 );
