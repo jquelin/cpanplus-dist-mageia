@@ -18,6 +18,7 @@ use File::Basename;
 use File::Copy      qw[ copy ];
 use File::HomeDir;
 use IPC::Cmd        qw[ run can_run ];
+use Pod::POM;
 use Readonly;
 
 our $VERSION = '0.2.2';
@@ -117,7 +118,7 @@ sub prepare {
     $status->distname( $distname );
     my $distvers    = $module->package_version;
     my $distext     = $module->package_extension;
-    #my $distsummary    = 
+    my $distsummary    = _module_summary($module);
     #my $distdescr      = 
     #my $distlicense    =
     my ($disttoplevel) = $module->name=~ /([^:]+)::/;
@@ -173,7 +174,7 @@ sub prepare {
 
         $line =~ s/DISTNAME/$distname/;
         $line =~ s/DISTVERS/$distvers/;
-        #$line =~ s/DISTSUMMARY/$distsummary/;
+        $line =~ s/DISTSUMMARY/$distsummary/;
         $line =~ s/DISTEXTENSION/$distext/;
         $line =~ s/DISTBUILDREQUIRES/$distbreqs/;
         #$line =~ s/DISTDESCR/$distdescr/;
@@ -322,6 +323,43 @@ sub _mk_pkg_name {
     return $name;
 }
 
+#
+# my $summary = _module_summary($module);
+#
+# given a cpanplus::module, return its registered description (if any)
+# or try to extract it from the embedded pod in the extracted files.
+#
+sub _module_summary {
+    my ($module) = @_;
+
+    # registered modules won't go farther...
+    return $module->description if $module->description;
+
+    my $path = dirname $module->_status->extract; # where tarball has been extracted
+    my @docfiles =
+        map  { "$path/$_" }               # prepend extract directory
+        sort { length $a <=> length $b }  # sort by length: we prefer top-level module summary
+        grep { /\.(pod|pm)$/ }            # filter out those that can contain pod
+        @{ $module->_status->files };     # list of files embedded
+
+    # parse file, trying to find a header
+    my $parser = Pod::POM->new;
+    foreach my $docfile ( @docfiles ) {
+        my $pom = $parser->parse_file($docfile);  # try to find some pod
+        next unless defined $pom;                 # the file may contain no pod, that's ok
+        HEAD1:
+        foreach my $head1 ($pom->head1) {
+            my $title = $head1->title;
+            next HEAD1 unless $title eq 'NAME';
+            my $content = $head1->content;
+            $content =~ s/^[^-]+ - //;
+            $content =~ s/\n+$//;
+            return $content if $content;
+        }
+    }
+
+    return 'no summary found';
+}
 
 1;
 
