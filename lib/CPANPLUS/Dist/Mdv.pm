@@ -21,7 +21,7 @@ use IPC::Cmd        qw[ run can_run ];
 use Pod::POM;
 use Readonly;
 
-our $VERSION = '0.2.2';
+our $VERSION = '0.3.0';
 
 Readonly my $DATA_OFFSET => tell(DATA);
 Readonly my $RPMDIR      => File::HomeDir->my_home . '/rpm';

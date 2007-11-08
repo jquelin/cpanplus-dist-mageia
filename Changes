@@ -3,12 +3,19 @@ Revision history for CPANPLUS-Dist-Mdv
 High-level changelog
 ====================
 
+0.3.x  better module information
 0.2.x  better resilience to errors
 0.1.x  initial release
 
 
 Low-level changelog
 ===================
+
+0.3.0 Thu Nov  8 19:24:00 CET 2007
+ - provide summary in generated specfile + rpm
+ - try to provide a description in generated specfile + rpm
+
+**
 
 0.2.2 Wed Nov  7 19:09:50 CET 2007
  - taking guillomovitch's input into account
