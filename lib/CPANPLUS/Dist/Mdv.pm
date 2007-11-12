@@ -18,6 +18,7 @@ use File::Basename;
 use File::Copy      qw[ copy ];
 use File::HomeDir;
 use IPC::Cmd        qw[ run can_run ];
+use List::Util      qw[ first ];
 use Pod::POM;
 use Readonly;
 
@@ -128,6 +129,9 @@ sub prepare {
         grep { /(README|Change(s|log)|LICENSE|META.yml)$/i }
         map { basename $_ }
         @{ $module->status->files };
+    my $distarch =
+        defined( first { /\.(c|xs)$/i } @{ $module->status->files } )
+        ? '' : 'BuildArch: noarch';
 
     my $rpmname = _mk_pkg_name($distname);
     $status->rpmname( $rpmname );
@@ -176,6 +180,7 @@ sub prepare {
         $line =~ s/DISTVERS/$distvers/;
         $line =~ s/DISTSUMMARY/$distsummary/;
         $line =~ s/DISTEXTENSION/$distext/;
+        $line =~ s/DISTARCH/$distarch/;
         $line =~ s/DISTBUILDREQUIRES/$distbreqs/;
         $line =~ s/DISTDESCR/$distdescr/;
         $line =~ s/DISTDOC/@docfiles ? "%doc @docfiles" : ''/e;
@@ -418,7 +423,7 @@ BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: perl-devel
 DISTBUILDREQUIRES
 
-BuildArch: noarch
+DISTARCH
 
 %description
 DISTDESCR
@@ -444,7 +449,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 DISTDOC
 %{_mandir}/man3/*
-%perl_vendorlib/DISTTOPLEVEL
+%perl_vendorlib/*
 DISTEXTRA
 
 
