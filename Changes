@@ -11,6 +11,10 @@ High-level changelog
 Low-level changelog
 ===================
 
+0.3.1 Mon Nov 12 18:30:08 CET 2007
+ - try to guess build arch
+ - module toplevel replaced by a wildcard (for native packages)
+
 0.3.0 Thu Nov  8 19:24:00 CET 2007
  - provide summary in generated specfile + rpm
  - try to provide a description in generated specfile + rpm
