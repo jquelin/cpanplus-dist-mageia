@@ -386,6 +386,7 @@ sub _module_summary {
 
     # parse file, trying to find a header
     my $parser = Pod::POM->new;
+    DOCFILE:
     foreach my $docfile ( @docfiles ) {
         my $pom = $parser->parse_file($docfile);  # try to find some pod
         next unless defined $pom;                 # the file may contain no pod, that's ok
@@ -394,9 +395,8 @@ sub _module_summary {
             my $title = $head1->title;
             next HEAD1 unless $title eq 'NAME';
             my $content = $head1->content;
-            $content =~ s/^[^-]+ - //;
-            $content =~ s/\n+$//;
-            return $content if $content;
+            next DOCFILE unless $content =~ /^[^-]+ - (.*)$/m;
+            return $1 if $content;
         }
     }
 
