@@ -432,7 +432,7 @@ DISTDESCR
 %setup -q -n %{realname}-%{version} 
 
 %build
-yes | %{__perl} Makefile.PL -n INSTALLDIRS=vendor
+yes | %{__perl} Makefile.PL INSTALLDIRS=vendor
 %make
 
 %check
