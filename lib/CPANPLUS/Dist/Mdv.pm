@@ -436,7 +436,7 @@ yes | %{__perl} Makefile.PL -n INSTALLDIRS=vendor
 %make
 
 %check
-#make test
+make test
 
 %install
 rm -rf $RPM_BUILD_ROOT
