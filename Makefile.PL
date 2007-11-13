@@ -22,6 +22,7 @@ WriteMakefile(
     PREREQ_PM => {
         'CPANPLUS'        => 0,
         'File::HomeDir'   => 0,
+        'File::Slurp'     => 0,
         'IPC::Cmd'        => 0,
         'Pod::POM'        => 0,
         'Readonly'        => 0,
