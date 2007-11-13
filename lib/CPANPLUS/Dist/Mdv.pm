@@ -17,6 +17,7 @@ use CPANPLUS::Error; # imported subs: error(), msg()
 use File::Basename;
 use File::Copy      qw[ copy ];
 use File::HomeDir;
+use File::Slurp     qw[ slurp ];
 use IPC::Cmd        qw[ run can_run ];
 use List::Util      qw[ first ];
 use Pod::POM;
@@ -124,6 +125,7 @@ sub prepare {
     #my $distlicense    =
     my ($disttoplevel) = $module->name=~ /([^:]+)::/;
     my @reqs           = sort keys %{ $module->status->prereqs };
+    push @reqs, 'Module::Build::Compat' if _is_module_build_compat($module);
     my $distbreqs      = join "\n", map { "BuildRequires: perl($_)" } @reqs;
     my @docfiles =
         grep { /(README|Change(s|log)|LICENSE|META.yml)$/i }
@@ -315,6 +317,14 @@ sub _has_been_build {
 #--
 # private subs
 
+sub _is_module_build_compat {
+    my ($module) = @_;
+    my $makefile = $module->_status->extract . '/Makefile.PL';
+    my $content  = slurp($makefile);
+    return $content =~ /Module::Build::Compat/;
+}
+
+
 #
 # my $name = _mk_pkg_name($dist);
 #
@@ -432,7 +442,7 @@ DISTDESCR
 %setup -q -n %{realname}-%{version} 
 
 %build
-yes | %{__perl} Makefile.PL INSTALLDIRS=vendor
+%{__perl} Makefile.PL INSTALLDIRS=vendor
 %make
 
 %check
@@ -452,8 +462,6 @@ DISTDOC
 %perl_vendorlib/*
 DISTEXTRA
 
-
-%changelog
 
 __END__
 
