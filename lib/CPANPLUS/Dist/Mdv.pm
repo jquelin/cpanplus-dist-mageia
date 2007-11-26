@@ -23,7 +23,7 @@ use List::Util      qw[ first ];
 use Pod::POM;
 use Readonly;
 
-our $VERSION = '0.3.2';
+our $VERSION = '0.3.3';
 
 Readonly my $DATA_OFFSET => tell(DATA);
 Readonly my $RPMDIR      => File::HomeDir->my_home . '/rpm';
@@ -371,7 +371,7 @@ sub _module_description {
         }
     }
 
-    return 'no desccription found';
+    return 'no description found';
 }
 
 
