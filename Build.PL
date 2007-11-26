@@ -22,7 +22,6 @@ my $builder = Module::Build->new (
         map { ( '*/' x $_ ) . '*~' } 0..5 ],
     script_files   => [ ],
     build_requires => {
-        perl              => '5.008',
         'CPANPLUS'        => 0,
         'File::HomeDir'   => 0,
         'File::Slurp'     => 0,
@@ -30,6 +29,7 @@ my $builder = Module::Build->new (
         'Pod::POM'        => 0,
         'Readonly'        => 0,
         'Test::More'      => 0,
+        'perl'            => '5.008',
     },
     requires       => {
         'CPANPLUS'        => 0,
@@ -38,6 +38,11 @@ my $builder = Module::Build->new (
         'IPC::Cmd'        => 0,
         'Pod::POM'        => 0,
         'Readonly'        => 0,
+        'perl'            => '5.008',
+    },
+    recommends     => {
+        'Test::Pod'           => 0,
+        'Test::Pod::Coverage' => 0,
     },
 );
 
