@@ -23,7 +23,6 @@ my $builder = Module::Build->new (
     script_files   => [ ],
     build_requires => {
         'CPANPLUS'        => 0,
-        'File::HomeDir'   => 0,
         'File::Slurp'     => 0,
         'IPC::Cmd'        => 0,
         'Pod::POM'        => 0,
@@ -33,7 +32,6 @@ my $builder = Module::Build->new (
     },
     requires       => {
         'CPANPLUS'        => 0,
-        'File::HomeDir'   => 0,
         'File::Slurp'     => 0,
         'IPC::Cmd'        => 0,
         'Pod::POM'        => 0,
