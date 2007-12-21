@@ -11,6 +11,9 @@ High-level changelog
 Low-level changelog
 ===================
 
+0.3.4 Fri Dec 21 13:12:52 CET 2007
+ - ticket #31693: using rpm command to find rpm topdir
+
 0.3.3 Mon Nov 26 13:57:03 CET 2007
  - fixing typo in default description
  - kwalitee/cpants release
