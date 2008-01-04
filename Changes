@@ -11,6 +11,8 @@ High-level changelog
 Low-level changelog
 ===================
 
+ - moving to git
+
 0.3.4 Fri Dec 21 13:12:52 CET 2007
  - ticket #31693: using rpm command to find rpm topdir
 
