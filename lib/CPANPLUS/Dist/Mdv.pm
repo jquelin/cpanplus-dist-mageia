@@ -20,6 +20,7 @@ use File::Slurp     qw[ slurp ];
 use IPC::Cmd        qw[ run can_run ];
 use List::Util      qw[ first ];
 use Pod::POM;
+use Pod::POM::View::Text;
 use Readonly;
 use Text::Wrap;
 
@@ -356,20 +357,21 @@ sub _module_description {
         map  { "$path/$_" }               # prepend extract directory
         sort { length $a <=> length $b }  # sort by length: we prefer top-level module description
         grep { /\.(pod|pm)$/ }            # filter out those that can contain pod
-        @{ $module->_status->files };     # list of files embedded
+        @{ $module->_status->files };     # list of embedded files
 
     # parse file, trying to find a header
     my $parser = Pod::POM->new;
+    DOCFILE:
     foreach my $docfile ( @docfiles ) {
         my $pom = $parser->parse_file($docfile);  # try to find some pod
-        next unless defined $pom;                 # the file may contain no pod, that's ok
+        next DOCFILE unless defined $pom;         # the file may contain no pod, that's ok
         HEAD1:
         foreach my $head1 ($pom->head1) {
-            my $title = $head1->title;
-            next HEAD1 unless $title eq 'DESCRIPTION';
-            my $content = $head1->content;
-            my @paragraphs = (@$content)[0..2];  # only the 3 first paragraphs
-            return fill('','',@paragraphs);      # wrapping
+            next HEAD1 unless $head1->title eq 'DESCRIPTION';
+            my $pom  = $head1->content;                         # get pod for DESCRIPTION paragraph
+            my $text = $pom->present('Pod::POM::View::Text');   # transform pod to text
+            my @paragraphs = (split /\n\n/, $text)[0..2];       # only the 3 first paragraphs
+            return join "\n\n", @paragraphs;
         }
     }
 
@@ -438,6 +440,7 @@ DISTBUILDREQUIRES
 DISTARCH
 
 %description
+
 DISTDESCR
 
 %prep
