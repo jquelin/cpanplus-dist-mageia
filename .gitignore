@@ -26,5 +26,5 @@ cover_db
 *.tmp
 
 # Avoid archives of this distribution
-CPANPLUS-Dist-MDV-*
+CPANPLUS-Dist-Mdv-*
 
