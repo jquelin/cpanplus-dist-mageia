@@ -21,6 +21,8 @@ use IPC::Cmd        qw[ run can_run ];
 use List::Util      qw[ first ];
 use Pod::POM;
 use Readonly;
+use Text::Wrap;
+
 
 our $VERSION = '0.3.4';
 
@@ -366,7 +368,8 @@ sub _module_description {
             my $title = $head1->title;
             next HEAD1 unless $title eq 'DESCRIPTION';
             my $content = $head1->content;
-            return join '', (@$content)[0..2]; # only the 3 first paragraphs
+            my @paragraphs = (@$content)[0..2];  # only the 3 first paragraphs
+            return fill('','',@paragraphs);      # wrapping
         }
     }
 
