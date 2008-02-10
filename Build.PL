@@ -28,6 +28,7 @@ my $builder = Module::Build->new (
         'Pod::POM'        => 0,
         'Readonly'        => 0,
         'Test::More'      => 0,
+        'Text::Wrap'      => 0,
         'perl'            => '5.008',
     },
     requires       => {
@@ -36,6 +37,7 @@ my $builder = Module::Build->new (
         'IPC::Cmd'        => 0,
         'Pod::POM'        => 0,
         'Readonly'        => 0,
+        'Text::Wrap'      => 0,
         'perl'            => '5.008',
     },
     recommends     => {
