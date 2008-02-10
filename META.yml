@@ -1,6 +1,6 @@
 ---
 name: CPANPLUS-Dist-Mdv
-version: 0.3.4
+version: 0.3.5
 author:
   - 'Jerome Quelin <jquelin@cpan.org>'
 abstract: a cpanplus backend to build mandriva rpms
@@ -12,6 +12,7 @@ requires:
   File::Slurp: 0
   IPC::Cmd: 0
   Pod::POM: 0
+  Pod::POM::View::Text: 0
   Readonly: 0
   perl: 5.008
 build_requires:
@@ -19,6 +20,7 @@ build_requires:
   File::Slurp: 0
   IPC::Cmd: 0
   Pod::POM: 0
+  Pod::POM::View::Text: 0
   Readonly: 0
   Test::More: 0
   perl: 5.008
@@ -28,7 +30,7 @@ recommends:
 provides:
   CPANPLUS::Dist::Mdv:
     file: lib/CPANPLUS/Dist/Mdv.pm
-    version: 0.3.4
+    version: 0.3.5
 generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
