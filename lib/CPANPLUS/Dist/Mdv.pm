@@ -440,7 +440,6 @@ DISTBUILDREQUIRES
 DISTARCH
 
 %description
-
 DISTDESCR
 
 %prep
