@@ -130,7 +130,7 @@ sub prepare {
     push @reqs, 'Module::Build::Compat' if _is_module_build_compat($module);
     my $distbreqs      = join "\n", map { "BuildRequires: perl($_)" } @reqs;
     my @docfiles =
-        grep { /(README|Change(s|log)|LICENSE|META.yml)$/i }
+        grep { /(README|Change(s|log)|LICENSE)$/i }
         map { basename $_ }
         @{ $module->status->files };
     my $distarch =
