@@ -466,6 +466,9 @@ DISTDOC
 %perl_vendorlib/*
 DISTEXTRA
 
+%changelog
+initial mdv release, generated with cpan2dist
+
 
 __END__
 
