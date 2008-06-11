@@ -11,6 +11,12 @@ High-level changelog
 Low-level changelog
 ===================
 
+0.3.6 Wed Jun 11 12:55:13 CEST 2008
+ - don't insert a blank line before description, as per thierry vignaud's request
+ - use %buildroot rpm macro instead of env var, as per guillaume's request
+ - don't package META.yml file, as per guillaume's request
+ - added initial changelog to be imported by mdvsys, as per guillaume's request
+
 0.3.5 Sun Feb 10 18:53:39 CET 2008
  - moving to git
  - using pod::pom::view::text to format description
