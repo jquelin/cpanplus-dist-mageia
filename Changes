@@ -13,6 +13,7 @@ Low-level changelog
 
 0.3.7 
  - fix bug 38360: borken changelog generation (shlomi fish)
+ - update repository information
 
 0.3.6 Wed Jun 11 12:55:13 CEST 2008
  - don't insert a blank line before description, as per thierry vignaud's request

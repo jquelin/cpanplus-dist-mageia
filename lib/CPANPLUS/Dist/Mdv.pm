@@ -612,7 +612,7 @@ C<cpan2dist>, C<rpm>, C<urpmi>
 
 
 C<CPANPLUS::Dist::Mdv> development takes place on
-L<http://cpanplus-dist-mdv.googlecode.com> - feel free to join us.
+L<http://repo.or.cz/w/cpanplus-dist-mdv.git> - feel free to join us.
 
 
 You can also look for information on this module at:
