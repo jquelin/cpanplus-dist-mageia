@@ -23,6 +23,7 @@ use Pod::POM;
 use Pod::POM::View::Text;
 use Readonly;
 use Text::Wrap;
+use POSIX ();
 
 
 our $VERSION = '0.3.6';
@@ -181,7 +182,7 @@ sub prepare {
         last if $line =~ /^__END__$/;
 
         $line =~ s/DISTNAME/$distname/;
-        $line =~ s/DISTVERS/$distvers/;
+        $line =~ s/DISTVERS/$distvers/g;
         $line =~ s/DISTSUMMARY/$distsummary/;
         $line =~ s/DISTEXTENSION/$distext/;
         $line =~ s/DISTARCH/$distarch/;
@@ -190,6 +191,7 @@ sub prepare {
         $line =~ s/DISTDOC/@docfiles ? "%doc @docfiles" : ''/e;
         $line =~ s/DISTTOPLEVEL/$disttoplevel/;
         $line =~ s/DISTEXTRA/join( "\n", @{ $status->extra_files || [] })/e;
+        $line =~ s/DISTDATE/POSIX::strftime("%a %b %d %Y", localtime())/e;
 
         print $specfh $line;
     }
@@ -467,8 +469,8 @@ DISTDOC
 DISTEXTRA
 
 %changelog
-initial mdv release, generated with cpan2dist
-
+* DISTDATE cpan2dist DISTVERS-1mdv
+- initial mdv release, generated with cpan2dist
 
 __END__
 

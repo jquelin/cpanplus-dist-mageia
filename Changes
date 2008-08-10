@@ -11,6 +11,9 @@ High-level changelog
 Low-level changelog
 ===================
 
+0.3.7 
+ - fix bug 38360: borken changelog generation (shlomi fish)
+
 0.3.6 Wed Jun 11 12:55:13 CEST 2008
  - don't insert a blank line before description, as per thierry vignaud's request
  - use %buildroot rpm macro instead of env var, as per guillaume's request
