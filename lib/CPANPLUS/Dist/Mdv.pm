@@ -21,12 +21,12 @@ use IPC::Cmd        qw[ run can_run ];
 use List::Util      qw[ first ];
 use Pod::POM;
 use Pod::POM::View::Text;
+use POSIX ();
 use Readonly;
 use Text::Wrap;
-use POSIX ();
 
 
-our $VERSION = '0.3.6';
+our $VERSION = '0.3.7';
 
 Readonly my $DATA_OFFSET => tell(DATA);
 Readonly my $RPMDIR => do { chomp(my $d=qx[ rpm --eval %_topdir ]); $d; };
