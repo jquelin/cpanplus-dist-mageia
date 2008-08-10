@@ -25,6 +25,7 @@ WriteMakefile(
         'IPC::Cmd'             => 0,
         'Pod::POM'             => 0,
         'Pod::POM::View::Text' => 0,
+        'POSIX'                => 0,
         'Readonly'             => 0,
         'Test::More'           => 0,
     },
