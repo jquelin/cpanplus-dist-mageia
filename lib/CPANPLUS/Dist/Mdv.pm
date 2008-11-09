@@ -392,32 +392,42 @@ sub _module_summary {
     my ($module) = @_;
 
     # registered modules won't go farther...
-    return $module->description if $module->description;
+    my $summary = $module->description;
 
-    my $path = dirname $module->_status->extract; # where tarball has been extracted
-    my @docfiles =
-        map  { "$path/$_" }               # prepend extract directory
-        sort { length $a <=> length $b }  # sort by length: we prefer top-level module summary
-        grep { /\.(pod|pm)$/ }            # filter out those that can contain pod
-        @{ $module->_status->files };     # list of files embedded
+    if (!$summary) {
+        my $path = dirname $module->_status->extract; # where tarball has been extracted
+        my @docfiles =
+            map  { "$path/$_" }               # prepend extract directory
+            sort { length $a <=> length $b }  # sort by length: we prefer top-level module summary
+            grep { /\.(pod|pm)$/ }            # filter out those that can contain pod
+            @{ $module->_status->files };     # list of files embedded
 
-    # parse file, trying to find a header
-    my $parser = Pod::POM->new;
-    DOCFILE:
-    foreach my $docfile ( @docfiles ) {
-        my $pom = $parser->parse_file($docfile);  # try to find some pod
-        next unless defined $pom;                 # the file may contain no pod, that's ok
-        HEAD1:
-        foreach my $head1 ($pom->head1) {
-            my $title = $head1->title;
-            next HEAD1 unless $title eq 'NAME';
-            my $content = $head1->content;
-            next DOCFILE unless $content =~ /^[^-]+ - (.*)$/m;
-            return $1 if $content;
+        # parse file, trying to find a header
+        my $parser = Pod::POM->new;
+        DOCFILE:
+        foreach my $docfile ( @docfiles ) {
+            my $pom = $parser->parse_file($docfile);  # try to find some pod
+            next unless defined $pom;                 # the file may contain no pod, that's ok
+            HEAD1:
+            foreach my $head1 ($pom->head1) {
+                my $title = $head1->title;
+                next HEAD1 unless $title eq 'NAME';
+                my $content = $head1->content;
+                next DOCFILE unless $content =~ /^[^-]+ - (.*)$/m;
+                $summary = $1 if $content;
+            }
         }
     }
 
-    return 'no summary found';
+    if (!$summary) {
+        $summary = 'no summary found';
+    }
+
+    # summary must begin with an uppercase, without any final dot
+    $summary =~ s/^(.)/\u$1/;
+    $summary =~ s/\.$//;
+
+    return $summary;
 }
 
 1;
