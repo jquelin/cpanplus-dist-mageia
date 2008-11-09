@@ -26,7 +26,7 @@ use Readonly;
 use Text::Wrap;
 
 
-our $VERSION = '0.3.7';
+our $VERSION = '0.3.8';
 
 Readonly my $DATA_OFFSET => tell(DATA);
 Readonly my $RPMDIR => do { chomp(my $d=qx[ rpm --eval %_topdir ]); $d; };

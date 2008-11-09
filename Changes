@@ -11,6 +11,10 @@ High-level changelog
 Low-level changelog
 ===================
 
+0.3.8 Sun Nov  9 17:58:49 CET 2008
+ - fix LC_ALL bug for date (guillomovitch)
+ - enforce mandriva summary format policy (guillomovitch)
+
 0.3.7 Sun Aug 10 09:00:43 CEST 2008
  - fix bug 38360: borken changelog generation (shlomi fish)
  - update repository information
