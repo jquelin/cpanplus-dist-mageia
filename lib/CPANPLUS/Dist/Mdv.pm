@@ -173,6 +173,7 @@ sub prepare {
 
     # writing the spec file.
     seek DATA, $DATA_OFFSET, 0;
+    POSIX::setlocale(POSIX::LC_ALL, 'C');
     my $specfh;
     if ( not open $specfh, '>', $spec ) {
         error( "can't open '$spec': $!" );
