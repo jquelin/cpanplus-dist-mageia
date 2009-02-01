@@ -260,7 +260,7 @@ sub create {
 
         # check if the dry-run finished correctly
         if ( $success ) {
-            my ($rpm)  = (sort glob "$RPMDIR/RPMS/*/$rpmname-*.rpm")[-1];
+            my ($rpm)  = (sort glob "$RPMDIR/RPMS/*/$rpmname-*.rpm")[0];
             my ($srpm) = (sort glob "$RPMDIR/SRPMS/$rpmname-*.src.rpm")[-1];
             msg( "rpm created successfully: $rpm" );
             msg( "srpm available: $srpm" );
