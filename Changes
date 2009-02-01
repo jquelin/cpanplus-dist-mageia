@@ -3,6 +3,7 @@ Revision history for CPANPLUS-Dist-Mdv
 High-level changelog
 ====================
 
+1.0.x  install support
 0.3.x  better module information
 0.2.x  better resilience to errors
 0.1.x  initial release
@@ -10,6 +11,12 @@ High-level changelog
 
 Low-level changelog
 ===================
+
+1.0.0 Sun Feb  1 17:56:59 CET 2009
+ - install() supported. module is somehow complete
+ - select first rpm created (hence, not the -debug one)
+
+**
 
 0.3.9 Mon Nov 10 09:12:23 CET 2008
  - fix LC_ALL usage, failing on some smoker setups
@@ -42,7 +49,7 @@ Low-level changelog
  - kwalitee/cpants release
 
 0.3.2 Tue Nov 13 18:09:34 CET 2007
- - checking for Makefile.PL à la Module::Build::Compat
+ - checking for Makefile.PL Ã  la Module::Build::Compat
  - fixing build problems
  - enabling tests during rpm creation
 
