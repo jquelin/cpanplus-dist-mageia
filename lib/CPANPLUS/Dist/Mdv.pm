@@ -476,8 +476,8 @@ Release:    %mkrel 1
 Summary:    DISTSUMMARY
 License:    GPL+ or Artistic
 Group:      Development/Perl
-Source0:    http://www.cpan.org/modules/by-module/DISTTOPLEVEL/%{upstream_name}-%{upstream_version}.DISTEXTENSION
 Url:        http://search.cpan.org/dist/%{upstream_name}
+Source0:    http://www.cpan.org/modules/by-module/DISTTOPLEVEL/%{upstream_name}-%{upstream_version}.DISTEXTENSION
 
 BuildRequires: perl-devel
 DISTBUILDREQUIRES
