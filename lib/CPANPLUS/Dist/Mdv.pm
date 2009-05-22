@@ -407,7 +407,8 @@ sub _module_description {
             next HEAD1 unless $head1->title eq 'DESCRIPTION';
             my $pom  = $head1->content;                         # get pod for DESCRIPTION paragraph
             my $text = $pom->present('Pod::POM::View::Text');   # transform pod to text
-            my @paragraphs = (split /\n\n/, $text)[0..2];       # only the 3 first paragraphs
+            my @paragraphs = split /\n\n/, $text;               # split into paragraphs
+            splice @paragraphs, 3 if @paragraphs > 3;           # only the 3 first paragraphs
             return join "\n\n", @paragraphs;
         }
     }
