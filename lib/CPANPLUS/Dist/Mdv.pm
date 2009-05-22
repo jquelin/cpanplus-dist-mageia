@@ -138,7 +138,8 @@ sub prepare {
         @{ $module->status->files };
     my $distarch =
         defined( first { /\.(c|xs)$/i } @{ $module->status->files } )
-        ? '' : 'BuildArch: noarch';
+        ? 'BuildRequires: perl-devel'
+        : 'BuildArch: noarch';
 
     my $rpmname = _mk_pkg_name($distname);
     $status->rpmname( $rpmname );
@@ -479,7 +480,6 @@ Group:      Development/Perl
 Url:        http://search.cpan.org/dist/%{upstream_name}
 Source0:    http://www.cpan.org/modules/by-module/DISTTOPLEVEL/%{upstream_name}-%{upstream_version}.DISTEXTENSION
 
-BuildRequires: perl-devel
 DISTBUILDREQUIRES
 DISTARCH
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}
