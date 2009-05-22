@@ -482,7 +482,7 @@ Source0:    http://www.cpan.org/modules/by-module/DISTTOPLEVEL/%{upstream_name}-
 BuildRequires: perl-devel
 DISTBUILDREQUIRES
 DISTARCH
-BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}
 
 %description
 DISTDESCR
