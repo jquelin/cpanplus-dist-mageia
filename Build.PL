@@ -10,41 +10,47 @@
 
 use strict;
 use warnings;
+
 use Module::Build;
+
+my %requires = (
+    'CPANPLUS'             => 0,
+    'File::Slurp'          => 0,
+    'IPC::Cmd'             => 0,
+    'Pod::POM'             => 0,
+    'Pod::POM::View::Text' => 0,
+    'POSIX'                => 0,
+    'Readonly'             => 0,
+    'perl'                 => '5.008',
+);
+my %build_requires = (
+    %requires,
+    'Test::More' => 0,
+);
+ my %recommends = (
+     'Test::Pod'           => 0,
+     'Test::Pod::Coverage' => 0,
+);
+
 
 my $builder = Module::Build->new (
     module_name         => 'CPANPLUS::Dist::Mdv',
     dist_author         => 'Jerome Quelin <jquelin@cpan.org>',
     license             => 'perl',
     dist_version_from   => 'lib/CPANPLUS/Dist/Mdv.pm',
-    add_to_cleanup => [
+    script_files        => [ ],
+    build_requires      => \%build_requires,
+    requires            => \%requires,
+    recommends          => \%recommends,
+    create_makefile_pl  => 'traditional',
+    add_to_cleanup      => [
         'CPANPLUS-Dist-Mdv-*', 'MANIFEST.bak',
-        map { ( '*/' x $_ ) . '*~' } 0..5 ],
-    script_files   => [ ],
-    build_requires => {
-        'CPANPLUS'             => 0,
-        'File::Slurp'          => 0,
-        'IPC::Cmd'             => 0,
-        'Pod::POM'             => 0,
-        'Pod::POM::View::Text' => 0,
-        'POSIX'                => 0,
-        'Readonly'             => 0,
-        'Test::More'           => 0,
-        'perl'                 => '5.008',
-    },
-    requires       => {
-        'CPANPLUS'             => 0,
-        'File::Slurp'          => 0,
-        'IPC::Cmd'             => 0,
-        'Pod::POM'             => 0,
-        'Pod::POM::View::Text' => 0,
-        'POSIX'                => 0,
-        'Readonly'             => 0,
-        'perl'                 => '5.008',
-    },
-    recommends     => {
-        'Test::Pod'           => 0,
-        'Test::Pod::Coverage' => 0,
+        map { ( '*/' x $_ ) . '*~' } 0..5
+    ],
+    meta_merge          => {
+        resources => {
+            repository => 'http://repo.or.cz/w/cpanplus-dist-mdv.git',
+        },
     },
 );
 
