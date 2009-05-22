@@ -15,10 +15,10 @@ use base 'CPANPLUS::Dist::Base';
 
 use CPANPLUS::Error; # imported subs: error(), msg()
 use File::Basename;
-use File::Copy      qw[ copy ];
-use File::Slurp     qw[ slurp ];
-use IPC::Cmd        qw[ run can_run ];
-use List::Util      qw[ first ];
+use File::Copy      qw{ copy };
+use File::Slurp     qw{ slurp };
+use IPC::Cmd        qw{ run can_run };
+use List::Util      qw{ first };
 use List::MoreUtils qw{ uniq };
 use Pod::POM;
 use Pod::POM::View::Text;
