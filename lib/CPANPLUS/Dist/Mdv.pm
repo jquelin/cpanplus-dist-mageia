@@ -19,6 +19,7 @@ use File::Copy      qw[ copy ];
 use File::Slurp     qw[ slurp ];
 use IPC::Cmd        qw[ run can_run ];
 use List::Util      qw[ first ];
+use List::MoreUtils qw{ uniq };
 use Pod::POM;
 use Pod::POM::View::Text;
 use POSIX ();
@@ -131,6 +132,7 @@ sub prepare {
     push @reqs, 'Module::Build::Compat' if _is_module_build_compat($module);
     my $distbreqs      = join "\n", map { "BuildRequires: perl($_)" } @reqs;
     my @docfiles =
+        uniq
         grep { /(README|Change(s|log)|LICENSE)$/i }
         map { basename $_ }
         @{ $module->status->files };
