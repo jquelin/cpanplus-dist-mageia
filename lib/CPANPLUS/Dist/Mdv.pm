@@ -26,15 +26,20 @@ our $VERSION = '1.1.0';
 Readonly my $RPMDIR => do { chomp(my $d=qx[ rpm --eval %_topdir ]); $d; };
 
 
-#--
-# class methods
+# -- class methods
 
-#
-# my $bool = CPANPLUS::Dist::Mdv->format_available;
-#
-# Return a boolean indicating whether or not you can use this package to
-# create and install modules in your environment.
-#
+=method my $bool = CPANPLUS::Dist::Mdv->format_available;
+
+Return a boolean indicating whether or not you can use this package to
+create and install modules in your environment.
+
+It will verify if you are on a mandriva system, and if you have all the
+necessary components avialable to build your own mandriva packages. You
+will need at least these dependencies installed: C<rpm>, C<rpmbuild> and
+C<gcc>.
+
+=cut
+
 sub format_available {
     # check mandriva release file
     if ( ! -f '/etc/mandriva-release' ) {
@@ -66,15 +71,18 @@ sub format_available {
     return not $flag;
 }
 
-#--
-# public methods
 
-#
-# my $bool = $mdv->init;
-#
-# Sets up the C<CPANPLUS::Dist::Mdv> object for use, and return true if
-# everything went fine.
-#
+# -- public methods
+
+=method my $bool = $mdv->init;
+
+Sets up the C<CPANPLUS::Dist::Mdv> object for use. Effectively creates
+all the needed status accessors.
+
+Called automatically whenever you create a new C<CPANPLUS::Dist> object.
+
+=cut
+
 sub init {
     my ($self) = @_;
     my $status = $self->status; # an Object::Accessor
@@ -91,6 +99,25 @@ sub init {
 
     return 1;
 }
+
+
+=method my $bool = $mdv->prepare;
+
+Prepares a distribution for creation. This means it will create the rpm
+spec file needed to build the rpm and source rpm. This will also satisfy
+any prerequisites the module may have.
+
+Note that the spec file will be as accurate as possible. However, some
+fields may wrong (especially the description, and maybe the summary)
+since it relies on pod parsing to find those information.
+
+Returns true on success and false on failure.
+
+You may then call C<< $mdv->create >> on the object to create the rpm
+from the spec file, and then C<< $mdv->install >> on the object to
+actually install it.
+
+=cut
 
 sub prepare {
     my ($self, %args) = @_;
@@ -224,6 +251,17 @@ sub prepare {
 }
 
 
+=method my $bool = $mdv->create;
+
+Builds the rpm file from the spec file created during the C<create()>
+step.
+
+Returns true on success and false on failure.
+
+You may then call C<< $mdv->install >> on the object to actually install it.
+
+=cut
+
 sub create {
     my ($self, %args) = @_;
     my $status = $self->status;               # private hash
@@ -307,6 +345,15 @@ sub create {
     }
 }
 
+
+=method my $bool = $mdv->install;
+
+Installs the rpm using C<rpm -U>.
+
+Returns true on success and false on failure
+
+=cut
+
 sub install {
     my ($self, %args) = @_;
     my $status = $self->status;               # private hash
@@ -347,9 +394,7 @@ sub install {
 }
 
 
-
-#--
-# private methods
+# -- private methods
 
 #
 # my $bool = $self->_has_been_build;
@@ -364,15 +409,25 @@ sub _has_been_build {
 }
 
 
-#--
-# private subs
+# -- private subs
 
+#
+# my $path = _path_to_makefile_pl();
+#
+# return the path to the extracted makefile.pl
+#
 sub _path_to_makefile_pl {
     my $module = shift;
-
     return $module->_status->extract . '/Makefile.PL';
 }
 
+
+#
+# my $bool = _is_module_build_compat();
+#
+# return true if shipped makefile.pl is auto-generated with
+# module::build::compat usage.
+#
 sub _is_module_build_compat {
     my ($module) = @_;
     my $makefile = _path_to_makefile_pl($module);
@@ -526,90 +581,23 @@ Please always refer to the original CPAN package if you have questions.
 
 
 
-=head1 CLASS METHODS
-
-=head2 $bool = CPANPLUS::Dist::Mdv->format_available;
-
-Return a boolean indicating whether or not you can use this package to
-create and install modules in your environment.
-
-It will verify if you are on a mandriva system, and if you have all the
-necessary components avialable to build your own mandriva packages. You
-will need at least these dependencies installed: C<rpm>, C<rpmbuild> and
-C<gcc>.
-
-
-
-=head1 PUBLIC METHODS
-
-=head2 $bool = $mdv->init;
-
-Sets up the C<CPANPLUS::Dist::Mdv> object for use. Effectively creates
-all the needed status accessors.
-
-Called automatically whenever you create a new C<CPANPLUS::Dist> object.
-
-
-=head2 $bool = $mdv->prepare;
-
-Prepares a distribution for creation. This means it will create the rpm
-spec file needed to build the rpm and source rpm. This will also satisfy
-any prerequisites the module may have.
-
-Note that the spec file will be as accurate as possible. However, some
-fields may wrong (especially the description, and maybe the summary)
-since it relies on pod parsing to find those information.
-
-Returns true on success and false on failure.
-
-You may then call C<< $mdv->create >> on the object to create the rpm
-from the spec file, and then C<< $mdv->install >> on the object to
-actually install it.
-
-
-=head2 $bool = $mdv->create;
-
-Builds the rpm file from the spec file created during the C<create()>
-step.
-
-Returns true on success and false on failure.
-
-You may then call C<< $mdv->install >> on the object to actually install it.
-
-
-=head2 $bool = $mdv->install;
-
-Installs the rpm using C<rpm -U>.
-
-B</!\ Work in progress: not implemented.>
-
-Returns true on success and false on failure
-
-
 
 =head1 TODO
 
-There are no TODOs of a technical nature currently, merely of an
-administrative one;
-
-=over
-
-=item o Scan for proper license
+=head2 Scan for proper license
 
 Right now we assume that the license of every module is C<the same
 as perl itself>. Although correct in almost all cases, it should 
 really be probed rather than assumed.
 
 
-=item o Long description
+=head2 Long description
 
 Right now we provided the description as given by the module in it's
 meta data. However, not all modules provide this meta data and rather
 than scanning the files in the package for it, we simply default to the
 name of the module.
 
-
-=back
 
 
 
