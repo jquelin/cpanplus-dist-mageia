@@ -129,7 +129,19 @@ sub prepare {
     #my $distlicense    =
     my ($disttoplevel) = $module->name=~ /([^:]+)::/;
     my @reqs           = sort keys %{ $module->status->prereqs };
-    push @reqs, 'Module::Build::Compat' if _is_module_build_compat($module);
+
+    my ($distbuild, $distmaker, $distinstall);
+    if (-e _path_to_makefile_pl($module)) {
+        push @reqs, 'Module::Build::Compat' if _is_module_build_compat($module);
+        $distbuild = "%{__perl} Makefile.PL INSTALLDIRS=vendor\n";
+        $distmaker = "%{make}";
+        $distinstall = "%makeinstall_std";
+    }
+    else {
+        $distbuild = "%{__perl} Build.PL installdirs=vendor\n";
+        $distmaker = "./Build";
+        $distinstall = "./Build install destdir=%{buildroot}";
+    }
     my $distbreqs      = join "\n", map { "BuildRequires: perl($_)" } @reqs;
     my @docfiles =
         uniq
@@ -189,7 +201,10 @@ sub prepare {
         $line =~ s/DISTVERS/$distvers/g;
         $line =~ s/DISTSUMMARY/$distsummary/;
         $line =~ s/DISTEXTENSION/$distext/;
+        $line =~ s/DISTBUILDBUILDER/$distbuild/;
+        $line =~ s/DISTINSTALL/$distinstall/;
         $line =~ s/DISTARCH/$distarch/;
+        $line =~ s/DISTMAKER/$distmaker/;
         $line =~ s/DISTBUILDREQUIRES/$distbreqs/;
         $line =~ s/DISTDESCR/$distdescr/;
         $line =~ s/DISTDOC/@docfiles ? "%doc @docfiles" : ''/e;
@@ -356,9 +371,15 @@ sub _has_been_build {
 #--
 # private subs
 
+sub _path_to_makefile_pl {
+    my $module = shift;
+
+    return $module->_status->extract . '/Makefile.PL';
+}
+
 sub _is_module_build_compat {
     my ($module) = @_;
-    my $makefile = $module->_status->extract . '/Makefile.PL';
+    my $makefile = _path_to_makefile_pl($module);
     my $content  = slurp($makefile);
     return $content =~ /Module::Build::Compat/;
 }
@@ -492,15 +513,15 @@ DISTDESCR
 %setup -q -n %{upstream_name}-%{upstream_version}
 
 %build
-%{__perl} Makefile.PL INSTALLDIRS=vendor
-%make
+DISTBUILDBUILDER
+DISTMAKER
 
 %check
-make test
+DISTMAKER test
 
 %install
 rm -rf %buildroot
-%makeinstall_std
+DISTINSTALL
 
 %clean
 rm -rf %buildroot
