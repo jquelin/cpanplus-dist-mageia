@@ -21,8 +21,6 @@ use Readonly;
 use Text::Wrap;
 
 
-our $VERSION = '1.1.0';
-
 Readonly my $RPMDIR => do { chomp(my $d=qx[ rpm --eval %_topdir ]); $d; };
 
 
