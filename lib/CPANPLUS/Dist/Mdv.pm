@@ -6,12 +6,13 @@ use warnings;
 use base 'CPANPLUS::Dist::Base';
 
 use CPANPLUS::Error; # imported subs: error(), msg()
-use File::Basename;
+use File::Basename  qw{ basename dirname fileparse };
 use File::Copy      qw{ copy };
 use File::Slurp     qw{ slurp };
 use IPC::Cmd        qw{ run can_run };
 use List::Util      qw{ first };
 use List::MoreUtils qw{ uniq };
+use Module::Util    qw{ find_installed };
 use Pod::POM;
 use Pod::POM::View::Text;
 use POSIX ();
@@ -21,7 +22,6 @@ use Text::Wrap;
 
 our $VERSION = '1.1.0';
 
-Readonly my $DATA_OFFSET => tell(DATA);
 Readonly my $RPMDIR => do { chomp(my $d=qx[ rpm --eval %_topdir ]); $d; };
 
 
@@ -180,14 +180,16 @@ sub prepare {
     my $vers = $module->version;
 
     # writing the spec file.
-    seek DATA, $DATA_OFFSET, 0;
+    my $tmpl = _template_spec_file_path();
+    open my $tmplfh, '<', $tmpl or die "can't open '$tmpl': $!";
+
     POSIX::setlocale(&POSIX::LC_ALL, 'C');
     my $specfh;
     if ( not open $specfh, '>', $spec ) {
         error( "can't open '$spec': $!" );
         return;
     }
-    while ( defined( my $line = <DATA> ) ) {
+    while ( defined( my $line = <$tmplfh> ) ) {
         last if $line =~ /^__END__$/;
 
         $line =~ s/DISTNAME/$distname/;
@@ -379,6 +381,18 @@ sub _is_module_build_compat {
 
 
 #
+# my $path = _template_spec_file_path();
+#
+# return the absolute path where the template spec will be located.
+#
+sub _template_spec_file_path {
+    my $path = find_installed(__PACKAGE__);
+    my ($undef, $dirname) = fileparse($path);
+    return "$dirname/Mdv/template.spec";
+}
+
+
+#
 # my $name = _mk_pkg_name($dist);
 #
 # given a distribution name, return the name of the mandriva rpm
@@ -480,55 +494,6 @@ sub _module_summary {
 }
 
 1;
-
-__DATA__
-%define upstream_name    DISTNAME
-%define upstream_version DISTVERS
-
-Name:       perl-%{upstream_name}
-Version:    %perl_convert_version %{upstream_version}
-Release:    %mkrel 1
-
-Summary:    DISTSUMMARY
-License:    GPL+ or Artistic
-Group:      Development/Perl
-Url:        http://search.cpan.org/dist/%{upstream_name}
-Source0:    http://www.cpan.org/modules/by-module/DISTTOPLEVEL/%{upstream_name}-%{upstream_version}.DISTEXTENSION
-
-DISTBUILDREQUIRES
-DISTARCH
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
-
-%description
-DISTDESCR
-
-%prep
-%setup -q -n %{upstream_name}-%{upstream_version}
-
-%build
-DISTBUILDBUILDER
-DISTMAKER
-
-%check
-DISTMAKER test
-
-%install
-rm -rf %buildroot
-DISTINSTALL
-
-%clean
-rm -rf %buildroot
-
-%files
-%defattr(-,root,root)
-DISTDOC
-%{_mandir}/man3/*
-%perl_vendorlib/*
-DISTEXTRA
-
-%changelog
-* DISTDATE cpan2dist DISTVERS-1mdv
-- initial mdv release, generated with cpan2dist
 
 __END__
 
