@@ -8,12 +8,20 @@
 #
 #
 
+use 5.010;
 use strict;
 use warnings;
 
-use Test::More tests => 1;
+use File::Find::Rule;
+use Test::More;
+use Test::Script;
 
-require_ok( 'CPANPLUS::Dist::Mdv' );
-diag( "Testing CPANPLUS::Dist::Mdv $CPANPLUS::Dist::Mdv::VERSION, Perl $], $^X" );
+my @files = File::Find::Rule->relative->file->name('*.pm')->in('lib');
+plan tests => scalar(@files);
 
-exit;
+foreach my $file ( @files ) {
+    my $module = $file;
+    $module =~ s/[\/\\]/::/g;
+    $module =~ s/\.pm$//;
+    is( qx{ $^X -M$module -e "print '$module ok'" }, "$module ok", "$module loaded ok" );
+}
