@@ -136,8 +136,9 @@ sub prepare {
         $distbuild = "%{__perl} Makefile.PL INSTALLDIRS=vendor\n";
         $distmaker = "%{make}";
         $distinstall = "%makeinstall_std";
-    }
-    else {
+    } else {
+        # module::build only distribution
+        push @reqs, 'Module::Build';
         $distbuild = "%{__perl} Build.PL installdirs=vendor\n";
         $distmaker = "./Build";
         $distinstall = "./Build install destdir=%{buildroot}";
