@@ -1,16 +1,11 @@
 Revision history for CPANPLUS-Dist-Mdv
 
-High-level changelog
-====================
+1.2.0 Wed Jul  1 17:47:57 2009
+ - moving template spec in its own file
+ - support for module::build only distributions (shlomi fish)
+ - infrastructue: moving to dist::zilla
 
-1.0.x  install support
-0.3.x  better module information
-0.2.x  better resilience to errors
-0.1.x  initial release
-
-
-Low-level changelog
-===================
+**
 
 1.1.0 Fri May 22 13:11:58 CEST 2009
  - using %perl_convert_version macro to normalize version numbers
