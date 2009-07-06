@@ -1,5 +1,8 @@
 Revision history for CPANPLUS-Dist-Mdv
 
+1.2.1 Mon Jul  6 16:42:57 CEST 2009
+ - fixing bug in prereq
+
 1.2.0 Wed Jul  1 17:47:57 2009
  - moving template spec in its own file
  - support for module::build only distributions (shlomi fish)
