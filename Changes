@@ -1,5 +1,14 @@
 Revision history for CPANPLUS-Dist-Mdv
 
+{{$NEXT}}
+
+2.093310  2009-11-27 14:46:53 Europe/Paris
+ - moving to 2.yydddn version scheme
+ - requiring perl 5.10.x (which is the default in mandriva)
+ - fix #52096: improved error messages
+
+**
+
 1.2.1 Mon Jul  6 16:42:57 CEST 2009
  - fixing bug in prereq
 
