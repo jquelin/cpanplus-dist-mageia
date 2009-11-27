@@ -1,8 +1,8 @@
-package CPANPLUS::Dist::Mdv;
-# ABSTRACT: a cpanplus backend to build mandriva rpms
-
 use strict;
 use warnings;
+
+package CPANPLUS::Dist::Mdv;
+# ABSTRACT: a cpanplus backend to build mandriva rpms
 
 use base 'CPANPLUS::Dist::Base';
 
