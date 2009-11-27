@@ -373,6 +373,7 @@ sub install {
     msg( "installing $rpm" );
 
     # install the rpm
+    # sudo is used, which means sudoers should be properly configured.
     my ($buffer, $success);
     INSTALL: {
         local $ENV{LC_ALL} = 'C';
@@ -529,8 +530,10 @@ sub _module_summary {
             next unless defined $pom;                 # the file may contain no pod, that's ok
             HEAD1:
             foreach my $head1 ($pom->head1) {
+                # continue till we find '=head1 NAME'
                 my $title = $head1->title;
                 next HEAD1 unless $title eq 'NAME';
+                # extract the description in NAME section
                 my $content = $head1->content;
                 next DOCFILE unless $content =~ /^[^-]+ - (.*)$/m;
                 $summary = $1 if $content;
@@ -543,6 +546,7 @@ sub _module_summary {
     }
 
     # summary must begin with an uppercase, without any final dot
+    # (this is a rpmlint policy)
     $summary =~ s/^(.)/\u$1/;
     $summary =~ s/\.$//;
 
@@ -550,13 +554,12 @@ sub _module_summary {
 }
 
 1;
-
 __END__
 
 
 =head1 SYNOPSYS
 
-    cpan2dist --format=CPANPLUS::Dist::Mdv Some::Random::Package
+    $ cpan2dist --format=CPANPLUS::Dist::Mdv Some::Random::Package
 
 
 
@@ -600,30 +603,27 @@ name of the module.
 
 
 
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<< < cpanplus-dist-mdv at
-rt.cpan.org> >>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=CPANPLUS-Dist-Mdv>.  I
-will be notified, and then you'll automatically be notified of progress
-on your bug as I make changes.
-
-
-
 =head1 SEE ALSO
 
 L<CPANPLUS::Backend>, L<CPANPLUS::Module>, L<CPANPLUS::Dist>,
 C<cpan2dist>, C<rpm>, C<urpmi>
 
 
-C<CPANPLUS::Dist::Mdv> development takes place on
-L<http://repo.or.cz/w/cpanplus-dist-mdv.git> - feel free to join us.
-
-
-You can also look for information on this module at:
+You can look for information on this module at:
 
 =over 4
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/CPANPLUS-Dist-Mdv>
+
+=item * See open / report bugs
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPANPLUS-Dist-Mdv>
+
+=item * Git repository
+
+L<http://github.com/jquelin/cpanplus-dist-mdv>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
@@ -633,11 +633,5 @@ L<http://annocpan.org/dist/CPANPLUS-Dist-Mdv>
 
 L<http://cpanratings.perl.org/d/CPANPLUS-Dist-Mdv>
 
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPANPLUS-Dist-Mdv>
-
 =back
-
-
 
