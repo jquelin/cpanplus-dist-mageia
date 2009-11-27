@@ -48,13 +48,7 @@ sub format_available {
     my $flag;
 
     # check rpm tree structure
-    my @subdirs = qw{ BUILD RPMS SOURCES SPECS SRPMS tmp };
-    if ( ! -d $RPMDIR ) {
-        error( 'need to create rpm tree structure in your home:' );
-        error($_) for map { "\t$RPMDIR/$_" } @subdirs;
-        return;
-    }
-    foreach my $subdir ( @subdirs ) {
+    foreach my $subdir ( qw{ BUILD RPMS SOURCES SPECS SRPMS tmp } ) {
         my $dir = "$RPMDIR/$subdir";
         next if -d $dir;
         error( "missing directory '$dir'" );
