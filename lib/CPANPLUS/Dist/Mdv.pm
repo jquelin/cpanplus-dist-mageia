@@ -24,7 +24,6 @@ use Text::Wrap;
 
 Readonly my $RPMDIR => do { chomp(my $d=qx[ rpm --eval %_topdir ]); $d; };
 
-
 # -- class methods
 
 =method my $bool = CPANPLUS::Dist::Mdv->format_available;
@@ -49,11 +48,13 @@ sub format_available {
     my $flag;
 
     # check rpm tree structure
+    my @subdirs = qw{ BUILD RPMS SOURCES SPECS SRPMS tmp };
     if ( ! -d $RPMDIR ) {
-        error( 'need to create rpm tree structure in your home' );
+        error( 'need to create rpm tree structure in your home:' );
+        error($_) for map { "\t$RPMDIR/$_" } @subdirs;
         return;
     }
-    foreach my $subdir ( qw[ BUILD RPMS SOURCES SPECS SRPMS tmp ] ) {
+    foreach my $subdir ( @subdirs ) {
         my $dir = "$RPMDIR/$subdir";
         next if -d $dir;
         error( "missing directory '$dir'" );
