@@ -157,7 +157,8 @@ sub prepare {
         $distmaker = "./Build";
         $distinstall = "./Build install destdir=%{buildroot}";
     }
-    my $distbreqs      = join "\n", map { "BuildRequires: perl($_)" } @reqs;
+    my $distbreqs      = join "\n", map { "BuildRequires: perl($_)" } 
+                         grep { $_ ne "perl" } @reqs;
     my @docfiles =
         uniq
         grep { /(README|Change(s|log)|LICENSE)$/i }
