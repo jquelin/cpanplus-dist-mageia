@@ -161,7 +161,7 @@ sub prepare {
                          grep { $_ ne "perl" } @reqs;
     my @docfiles =
         uniq
-        grep { /(README|Change(s|log)|LICENSE)$/i }
+        grep { /(README|Change(s|log)|LICENSE|META.(json|yml))$/i }
         map { basename $_ }
         @{ $module->status->files };
     my $distarch =
