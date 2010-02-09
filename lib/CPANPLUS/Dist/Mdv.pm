@@ -8,13 +8,13 @@ package CPANPLUS::Dist::Mdv;
 use base 'CPANPLUS::Dist::Base';
 
 use CPANPLUS::Error; # imported subs: error(), msg()
-use File::Basename  qw{ basename dirname fileparse };
+use File::Basename  qw{ basename dirname };
 use File::Copy      qw{ copy };
+use File::ShareDir  qw{ dist_dir };
 use File::Slurp     qw{ slurp };
 use IPC::Cmd        qw{ run can_run };
 use List::Util      qw{ first };
 use List::MoreUtils qw{ uniq };
-use Module::Util    qw{ find_installed };
 use Pod::POM;
 use Pod::POM::View::Text;
 use POSIX ();
@@ -438,9 +438,8 @@ sub _is_module_build_compat {
 # return the absolute path where the template spec will be located.
 #
 sub _template_spec_file_path {
-    my $path = find_installed(__PACKAGE__);
-    my ($undef, $dirname) = fileparse($path);
-    return "$dirname/Mdv/template.spec";
+    my $path = dist_dir('CPANPLUS-Dist-Mdv');
+    return "$path/template.spec";
 }
 
 
