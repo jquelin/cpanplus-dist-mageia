@@ -148,7 +148,7 @@ sub prepare {
     if (-e _path_to_makefile_pl($module)) {
         push @reqs, 'Module::Build::Compat' if _is_module_build_compat($module);
         $distbuild = "%{__perl} Makefile.PL INSTALLDIRS=vendor\n";
-        $distmaker = "%{make}";
+        $distmaker = "%make";
         $distinstall = "%makeinstall_std";
     } else {
         # module::build only distribution
