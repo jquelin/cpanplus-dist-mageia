@@ -343,7 +343,9 @@ sub create {
 
 =method my $bool = $mdv->install;
 
-Installs the rpm using C<rpm -U>.
+Installs the rpm using C<rpm -U>. If run as a non-root user, uses
+C<sudo>. This assumes that current user has sudo rights (without
+password for max efficiency) to run C<rpm>.
 
 Returns true on success and false on failure
 
