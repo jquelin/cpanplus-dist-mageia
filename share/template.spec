@@ -43,5 +43,5 @@ DISTDOC
 DISTEXTRA
 
 %changelog
-* DISTDATE cpan2dist DISTVERS-1mdv
-- initial mdv release, generated with cpan2dist
+* DISTDATE cpan2dist DISTVERS-1mga
+- initial mageia release, generated with cpan2dist

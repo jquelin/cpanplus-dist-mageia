@@ -2,8 +2,8 @@ use 5.010;
 use strict;
 use warnings;
 
-package CPANPLUS::Dist::Mdv;
-# ABSTRACT: a cpanplus backend to build mandriva rpms
+package CPANPLUS::Dist::Mageia;
+# ABSTRACT: a cpanplus backend to build mageia rpms
 
 use base 'CPANPLUS::Dist::Base';
 
@@ -26,22 +26,22 @@ Readonly my $RPMDIR => do { chomp(my $d=qx[ rpm --eval %_topdir ]); $d; };
 
 # -- class methods
 
-=method my $bool = CPANPLUS::Dist::Mdv->format_available;
+=method my $bool = CPANPLUS::Dist::Mageia->format_available;
 
 Return a boolean indicating whether or not you can use this package to
 create and install modules in your environment.
 
-It will verify if you are on a mandriva system, and if you have all the
-necessary components avialable to build your own mandriva packages. You
+It will verify if you are on a mageia system, and if you have all the
+necessary components avialable to build your own mageia packages. You
 will need at least these dependencies installed: C<rpm>, C<rpmbuild> and
 C<gcc>.
 
 =cut
 
 sub format_available {
-    # check mandriva release file
-    if ( ! -f '/etc/mandriva-release' ) {
-        error( 'not on a mandriva system' );
+    # check mageia release file
+    if ( ! -f '/etc/mageia-release' ) {
+        error( 'not on a mageia system' );
         return;
     }
 
@@ -58,7 +58,7 @@ sub format_available {
     # check prereqs
     for my $prog ( qw[ rpm rpmbuild gcc ] ) {
         next if can_run($prog);
-        error( "'$prog' is a required program to build mandriva packages" );
+        error( "'$prog' is a required program to build mageia packages" );
         $flag++;
     }
 
@@ -68,9 +68,9 @@ sub format_available {
 
 # -- public methods
 
-=method my $bool = $mdv->init;
+=method my $bool = $mga->init;
 
-Sets up the C<CPANPLUS::Dist::Mdv> object for use. Effectively creates
+Sets up the C<CPANPLUS::Dist::Mageia> object for use. Effectively creates
 all the needed status accessors.
 
 Called automatically whenever you create a new C<CPANPLUS::Dist> object.
@@ -84,9 +84,9 @@ sub init {
     # distvers: 1.23
     # extra_files: qw[ /bin/foo /usr/bin/bar ] 
     # rpmname:  perl-Foo-Bar
-    # rpmpath:  $RPMDIR/RPMS/noarch/perl-Foo-Bar-1.23-1mdv2008.0.noarch.rpm
+    # rpmpath:  $RPMDIR/RPMS/noarch/perl-Foo-Bar-1.23-1mga2008.0.noarch.rpm
     # rpmvers:  1
-    # srpmpath: $RPMDIR/SRPMS/perl-Foo-Bar-1.23-1mdv2008.0.src.rpm
+    # srpmpath: $RPMDIR/SRPMS/perl-Foo-Bar-1.23-1mga2008.0.src.rpm
     # specpath: $RPMDIR/SPECS/perl-Foo-Bar.spec
     $status->mk_accessors(qw[ distname distvers extra_files rpmname rpmpath
         rpmvers srpmpath specpath ]);
@@ -95,7 +95,7 @@ sub init {
 }
 
 
-=method my $bool = $mdv->prepare;
+=method my $bool = $mga->prepare;
 
 Prepares a distribution for creation. This means it will create the rpm
 spec file needed to build the rpm and source rpm. This will also satisfy
@@ -107,8 +107,8 @@ since it relies on pod parsing to find those information.
 
 Returns true on success and false on failure.
 
-You may then call C<< $mdv->create >> on the object to create the rpm
-from the spec file, and then C<< $mdv->install >> on the object to
+You may then call C<< $mga->create >> on the object to create the rpm
+from the spec file, and then C<< $mga->install >> on the object to
 actually install it.
 
 =cut
@@ -180,7 +180,7 @@ sub prepare {
 
         if ( not $opts{force} ) {
             msg( "won't re-spec package since --force isn't in use" );
-            # c::d::mdv store
+            # c::d::mga store
             $status->rpmpath($pkg); # store the path of rpm
             # cpanplus api
             $status->prepared(1);
@@ -246,14 +246,14 @@ sub prepare {
 }
 
 
-=method my $bool = $mdv->create;
+=method my $bool = $mga->create;
 
 Builds the rpm file from the spec file created during the C<create()>
 step.
 
 Returns true on success and false on failure.
 
-You may then call C<< $mdv->install >> on the object to actually install it.
+You may then call C<< $mga->install >> on the object to actually install it.
 
 =cut
 
@@ -311,7 +311,7 @@ sub create {
             my ($srpm) = (sort glob "$RPMDIR/SRPMS/$rpmname-*.src.rpm")[-1];
             msg( "rpm created successfully: $rpm" );
             msg( "srpm available: $srpm" );
-            # c::d::mdv store
+            # c::d::mga store
             $status->rpmpath($rpm);
             $status->srpmpath($srpm);
             # cpanplus api
@@ -322,7 +322,7 @@ sub create {
 
         # unknown error, aborting.
         if ( not $buffer =~ /^\s+Installed .but unpackaged. file.s. found:\n(.*)\z/ms ) {
-            error( "failed to create mandriva package for '$distname': $buffer" );
+            error( "failed to create mageia package for '$distname': $buffer" );
             # cpanplus api
             $status->created(0);
             return;
@@ -341,7 +341,7 @@ sub create {
 }
 
 
-=method my $bool = $mdv->install;
+=method my $bool = $mga->install;
 
 Installs the rpm using C<rpm -U>. If run as a non-root user, uses
 C<sudo>. This assumes that current user has sudo rights (without
@@ -440,7 +440,7 @@ sub _is_module_build_compat {
 # return the absolute path where the template spec will be located.
 #
 sub _template_spec_file_path {
-    my $path = dist_dir('CPANPLUS-Dist-Mdv');
+    my $path = dist_dir('CPANPLUS-Dist-Mageia');
     return "$path/template.spec";
 }
 
@@ -448,7 +448,7 @@ sub _template_spec_file_path {
 #
 # my $name = _mk_pkg_name($dist);
 #
-# given a distribution name, return the name of the mandriva rpm
+# given a distribution name, return the name of the mageia rpm
 # package. in most cases, it will be the same, but some pakcage name
 # will be too long as a rpm name: we'll have to cut it.
 #
@@ -555,13 +555,13 @@ __END__
 
 =head1 SYNOPSYS
 
-    $ cpan2dist --format=CPANPLUS::Dist::Mdv Some::Random::Package
+    $ cpan2dist --format=CPANPLUS::Dist::Mageia Some::Random::Package
 
 
 
 =head1 DESCRIPTION
 
-CPANPLUS::Dist::Mdv is a distribution class to create mandriva packages
+CPANPLUS::Dist::Mageia is a distribution class to create mageia packages
 from CPAN modules, and all its dependencies. This allows you to have
 the most recent copies of CPAN modules installed, using your package
 manager of choice, but without having to wait for central repositories
@@ -571,7 +571,7 @@ You can either install them using the API provided in this package, or
 manually via rpm.
 
 Some of the bleading edge CPAN modules have already been turned into
-mandriva packages for you, and you can make use of them by adding the
+mageia packages for you, and you can make use of them by adding the
 cooker repositories (main & contrib).
 
 Note that these packages are built automatically from CPAN and are
@@ -611,23 +611,23 @@ You can look for information on this module at:
 
 =item * Search CPAN
 
-L<http://search.cpan.org/dist/CPANPLUS-Dist-Mdv>
+L<http://search.cpan.org/dist/CPANPLUS-Dist-Mageia>
 
 =item * See open / report bugs
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPANPLUS-Dist-Mdv>
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPANPLUS-Dist-Mageia>
 
 =item * Git repository
 
-L<http://github.com/jquelin/cpanplus-dist-mdv>
+L<http://github.com/jquelin/cpanplus-dist-mageia>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
-L<http://annocpan.org/dist/CPANPLUS-Dist-Mdv>
+L<http://annocpan.org/dist/CPANPLUS-Dist-Mageia>
 
 =item * CPAN Ratings
 
-L<http://cpanratings.perl.org/d/CPANPLUS-Dist-Mdv>
+L<http://cpanratings.perl.org/d/CPANPLUS-Dist-Mageia>
 
 =back
 
