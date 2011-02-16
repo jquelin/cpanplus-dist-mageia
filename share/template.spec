@@ -13,7 +13,6 @@ Source0:    http://www.cpan.org/modules/by-module/DISTTOPLEVEL/%{upstream_name}-
 
 DISTBUILDREQUIRES
 DISTARCH
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
 
 %description
 DISTDESCR
