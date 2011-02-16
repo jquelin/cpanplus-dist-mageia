@@ -2,5 +2,8 @@ Revision history for CPANPLUS-Dist-Mdv
 
 {{$NEXT}}
 
+1.110471  2011-02-16 13:57:48 Europe/Paris
+ - no need for buildroot: in mageia
+
 1.110470  2011-02-16 13:36:37 Europe/Paris
  - forked from cpanplus-dist-mdv
