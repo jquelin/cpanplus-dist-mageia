@@ -2,6 +2,10 @@ Revision history for CPANPLUS-Dist-Mdv
 
 {{$NEXT}}
 
+1.111720  2011-06-21 16:27:57 Europe/Paris
+ - removing default %clean section
+ - removing default %defattr definition
+
 1.110471  2011-02-16 13:57:48 Europe/Paris
  - no need for buildroot: in mageia
 
