@@ -1,8 +1,19 @@
+#
+# This file is part of CPANPLUS-Dist-Mageia
+#
+# This software is copyright (c) 2011 by Jerome Quelin.
+#
+# This is free software; you can redistribute it and/or modify it under
+# the same terms as the Perl 5 programming language system itself.
+#
 use 5.010;
 use strict;
 use warnings;
 
 package CPANPLUS::Dist::Mageia;
+BEGIN {
+  $CPANPLUS::Dist::Mageia::VERSION = '1.111720';
+}
 # ABSTRACT: a cpanplus backend to build mageia rpms
 
 use base 'CPANPLUS::Dist::Base';
@@ -26,17 +37,6 @@ Readonly my $RPMDIR => do { chomp(my $d=qx[ rpm --eval %_topdir ]); $d; };
 
 # -- class methods
 
-=method my $bool = CPANPLUS::Dist::Mageia->format_available;
-
-Return a boolean indicating whether or not you can use this package to
-create and install modules in your environment.
-
-It will verify if you are on a mageia system, and if you have all the
-necessary components avialable to build your own mageia packages. You
-will need at least these dependencies installed: C<rpm>, C<rpmbuild> and
-C<gcc>.
-
-=cut
 
 sub format_available {
     # check mageia release file
@@ -68,14 +68,6 @@ sub format_available {
 
 # -- public methods
 
-=method my $bool = $mga->init;
-
-Sets up the C<CPANPLUS::Dist::Mageia> object for use. Effectively creates
-all the needed status accessors.
-
-Called automatically whenever you create a new C<CPANPLUS::Dist> object.
-
-=cut
 
 sub init {
     my ($self) = @_;
@@ -95,23 +87,6 @@ sub init {
 }
 
 
-=method my $bool = $mga->prepare;
-
-Prepares a distribution for creation. This means it will create the rpm
-spec file needed to build the rpm and source rpm. This will also satisfy
-any prerequisites the module may have.
-
-Note that the spec file will be as accurate as possible. However, some
-fields may wrong (especially the description, and maybe the summary)
-since it relies on pod parsing to find those information.
-
-Returns true on success and false on failure.
-
-You may then call C<< $mga->create >> on the object to create the rpm
-from the spec file, and then C<< $mga->install >> on the object to
-actually install it.
-
-=cut
 
 sub prepare {
     my ($self, %args) = @_;
@@ -246,16 +221,6 @@ sub prepare {
 }
 
 
-=method my $bool = $mga->create;
-
-Builds the rpm file from the spec file created during the C<create()>
-step.
-
-Returns true on success and false on failure.
-
-You may then call C<< $mga->install >> on the object to actually install it.
-
-=cut
 
 sub create {
     my ($self, %args) = @_;
@@ -341,15 +306,6 @@ sub create {
 }
 
 
-=method my $bool = $mga->install;
-
-Installs the rpm using C<rpm -U>. If run as a non-root user, uses
-C<sudo>. This assumes that current user has sudo rights (without
-password for max efficiency) to run C<rpm>.
-
-Returns true on success and false on failure
-
-=cut
 
 sub install {
     my ($self, %args) = @_;
@@ -550,14 +506,17 @@ sub _module_summary {
 }
 
 1;
-__END__
 
 
-=head1 SYNOPSYS
+=pod
 
-    $ cpan2dist --format=CPANPLUS::Dist::Mageia Some::Random::Package
+=head1 NAME
 
+CPANPLUS::Dist::Mageia - a cpanplus backend to build mageia rpms
 
+=head1 VERSION
+
+version 1.111720
 
 =head1 DESCRIPTION
 
@@ -578,8 +537,61 @@ Note that these packages are built automatically from CPAN and are
 assumed to have the same license as perl and come without support.
 Please always refer to the original CPAN package if you have questions.
 
+=head1 METHODS
 
+=head2 my $bool = CPANPLUS::Dist::Mageia->format_available;
 
+Return a boolean indicating whether or not you can use this package to
+create and install modules in your environment.
+
+It will verify if you are on a mageia system, and if you have all the
+necessary components avialable to build your own mageia packages. You
+will need at least these dependencies installed: C<rpm>, C<rpmbuild> and
+C<gcc>.
+
+=head2 my $bool = $mga->init;
+
+Sets up the C<CPANPLUS::Dist::Mageia> object for use. Effectively creates
+all the needed status accessors.
+
+Called automatically whenever you create a new C<CPANPLUS::Dist> object.
+
+=head2 my $bool = $mga->prepare;
+
+Prepares a distribution for creation. This means it will create the rpm
+spec file needed to build the rpm and source rpm. This will also satisfy
+any prerequisites the module may have.
+
+Note that the spec file will be as accurate as possible. However, some
+fields may wrong (especially the description, and maybe the summary)
+since it relies on pod parsing to find those information.
+
+Returns true on success and false on failure.
+
+You may then call C<< $mga->create >> on the object to create the rpm
+from the spec file, and then C<< $mga->install >> on the object to
+actually install it.
+
+=head2 my $bool = $mga->create;
+
+Builds the rpm file from the spec file created during the C<create()>
+step.
+
+Returns true on success and false on failure.
+
+You may then call C<< $mga->install >> on the object to actually install it.
+
+=head2 my $bool = $mga->install;
+
+Installs the rpm using C<rpm -U>. If run as a non-root user, uses
+C<sudo>. This assumes that current user has sudo rights (without
+password for max efficiency) to run C<rpm>.
+
+Returns true on success and false on failure
+
+=head1 SYNOPSYS
+
+    $ cpan2dist --format=CPANPLUS::Dist::Mageia Some::Random::Package
 
 =head1 TODO
 
@@ -589,7 +601,6 @@ Right now we assume that the license of every module is C<the same
 as perl itself>. Although correct in almost all cases, it should 
 really be probed rather than assumed.
 
-
 =head2 Long description
 
 Right now we provided the description as given by the module in it's
@@ -597,13 +608,10 @@ meta data. However, not all modules provide this meta data and rather
 than scanning the files in the package for it, we simply default to the
 name of the module.
 
-
-
 =head1 SEE ALSO
 
 L<CPANPLUS::Backend>, L<CPANPLUS::Module>, L<CPANPLUS::Dist>,
 C<cpan2dist>, C<rpm>, C<urpmi>
-
 
 You can look for information on this module at:
 
@@ -630,4 +638,21 @@ L<http://annocpan.org/dist/CPANPLUS-Dist-Mageia>
 L<http://cpanratings.perl.org/d/CPANPLUS-Dist-Mageia>
 
 =back
+
+=head1 AUTHOR
+
+Jerome Quelin
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Jerome Quelin.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+
+
+__END__
+
 
