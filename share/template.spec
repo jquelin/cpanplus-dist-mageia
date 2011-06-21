@@ -31,11 +31,7 @@ DISTMAKER test
 rm -rf %buildroot
 DISTINSTALL
 
-%clean
-rm -rf %buildroot
-
 %files
-%defattr(-,root,root)
 DISTDOC
 %{_mandir}/man3/*
 %perl_vendorlib/*
