@@ -1,6 +1,7 @@
 Revision history for CPANPLUS-Dist-Mdv
 
 {{$NEXT}}
+ - only root files can be added in %doc
 
 1.111720  2011-06-21 16:27:57 Europe/Paris
  - removing default %clean section

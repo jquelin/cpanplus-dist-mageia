@@ -163,6 +163,7 @@ sub prepare {
         uniq
         grep { /(README|Change(s|log)|LICENSE|META.(json|yml))$/i }
         map { basename $_ }
+        grep { m!^[^/]+/[^/]+$! }       # only interested in root files
         @{ $module->status->files };
     my $distarch =
         defined( first { /\.(c|xs)$/i } @{ $module->status->files } )
