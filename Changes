@@ -1,6 +1,8 @@
 Revision history for CPANPLUS-Dist-Mdv
 
 {{$NEXT}}
+
+1.111740  2011-06-23 13:35:06 Europe/Paris
  - only root files can be added in %doc
  - all-caps files will be listed in %doc
 
