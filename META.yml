@@ -10,7 +10,7 @@ build_requires:
 configure_requires:
   Module::Build: 0.3601
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.200007, CPAN::Meta::Converter version 2.110440'
+generated_by: 'Dist::Zilla version 4.200007, CPAN::Meta::Converter version 2.110930'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -19,7 +19,7 @@ name: CPANPLUS-Dist-Mageia
 provides:
   CPANPLUS::Dist::Mageia:
     file: lib/CPANPLUS/Dist/Mageia.pm
-    version: 1.111720
+    version: 1.111740
 requires:
   CPANPLUS::Dist::Base: 0
   CPANPLUS::Error: 0
@@ -40,7 +40,7 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=CPANPLUS-Dist-Mageia
   homepage: http://search.cpan.org/dist/CPANPLUS-Dist-Mageia/
   repository: git://github.com/jquelin/cpanplus-dist-mageia.git
-version: 1.111720
+version: 1.111740
 x_Dist_Zilla:
   plugins:
     -

@@ -1,5 +1,9 @@
 Revision history for CPANPLUS-Dist-Mdv
 
+1.111740  2011-06-23 13:35:06 Europe/Paris
+ - only root files can be added in %doc
+ - all-caps files will be listed in %doc
+
 1.111720  2011-06-21 16:27:57 Europe/Paris
  - removing default %clean section
  - removing default %defattr definition

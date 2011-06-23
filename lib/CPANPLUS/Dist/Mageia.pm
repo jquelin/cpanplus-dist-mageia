@@ -12,7 +12,7 @@ use warnings;
 
 package CPANPLUS::Dist::Mageia;
 BEGIN {
-  $CPANPLUS::Dist::Mageia::VERSION = '1.111720';
+  $CPANPLUS::Dist::Mageia::VERSION = '1.111740';
 }
 # ABSTRACT: a cpanplus backend to build mageia rpms
 
@@ -136,8 +136,12 @@ sub prepare {
                          grep { $_ ne "perl" } @reqs;
     my @docfiles =
         uniq
-        grep { /(README|Change(s|log)|LICENSE|META.(json|yml))$/i }
+        grep {
+            ( /^[A-Z.]+$/ && !/^MANIFEST/ ) ||
+            m{^(Change(s|log)|META.(json|yml)|(ex|s)amples?|e[gx]|demos?)$}i
+        }
         map { basename $_ }
+        grep { m!^[^/]+/[^/]+$! }       # only interested in root files
         @{ $module->status->files };
     my $distarch =
         defined( first { /\.(c|xs)$/i } @{ $module->status->files } )
@@ -516,7 +520,7 @@ CPANPLUS::Dist::Mageia - a cpanplus backend to build mageia rpms
 
 =head1 VERSION
 
-version 1.111720
+version 1.111740
 
 =head1 DESCRIPTION
 
