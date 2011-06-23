@@ -161,7 +161,10 @@ sub prepare {
                          grep { $_ ne "perl" } @reqs;
     my @docfiles =
         uniq
-        grep { /(README|Change(s|log)|LICENSE|META.(json|yml))$/i }
+        grep {
+            ( /^[A-Z.]+$/ && !/^MANIFEST/ ) ||
+            m{^(Change(s|log)|META.(json|yml)|(ex|s)amples?|e[gx]|demos?)$}i
+        }
         map { basename $_ }
         grep { m!^[^/]+/[^/]+$! }       # only interested in root files
         @{ $module->status->files };
