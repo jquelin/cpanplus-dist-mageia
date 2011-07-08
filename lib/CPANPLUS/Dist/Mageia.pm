@@ -12,7 +12,7 @@ use warnings;
 
 package CPANPLUS::Dist::Mageia;
 BEGIN {
-  $CPANPLUS::Dist::Mageia::VERSION = '1.111740';
+  $CPANPLUS::Dist::Mageia::VERSION = '1.111890';
 }
 # ABSTRACT: a cpanplus backend to build mageia rpms
 
@@ -303,7 +303,7 @@ sub create {
         $files =~ s/^\s+//mg; # remove spaces
         my @files = split /\n/, $files;
         $status->extra_files( \@files );
-        $self->prepare( %opts, force => 1 );
+        $self->prepare( %opts, force => 0 );
         msg( 'restarting build phase' );
         redo RPMBUILD;
     }
@@ -520,7 +520,7 @@ CPANPLUS::Dist::Mageia - a cpanplus backend to build mageia rpms
 
 =head1 VERSION
 
-version 1.111740
+version 1.111890
 
 =head1 DESCRIPTION
 

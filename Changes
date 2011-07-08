@@ -1,5 +1,8 @@
 Revision history for CPANPLUS-Dist-Mdv
 
+1.111890  2011-07-08 12:46:34 Europe/Paris
+ - prevent cpanplus to rebuild all deps if missing files detected
+
 1.111740  2011-06-23 13:35:06 Europe/Paris
  - only root files can be added in %doc
  - all-caps files will be listed in %doc
