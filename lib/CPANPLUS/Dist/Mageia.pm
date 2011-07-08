@@ -338,7 +338,7 @@ sub create {
         $files =~ s/^\s+//mg; # remove spaces
         my @files = split /\n/, $files;
         $status->extra_files( \@files );
-        $self->prepare( %opts, force => 1 );
+        $self->prepare( %opts, force => 0 );
         msg( 'restarting build phase' );
         redo RPMBUILD;
     }
