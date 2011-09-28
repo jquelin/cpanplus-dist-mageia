@@ -28,7 +28,6 @@ DISTMAKER
 DISTMAKER test
 
 %install
-rm -rf %buildroot
 DISTINSTALL
 
 %files

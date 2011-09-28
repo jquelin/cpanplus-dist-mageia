@@ -66,6 +66,9 @@ eval { $v .= pmver('Pod::POM::View::Text','any version') };
 eval { $v .= pmver('Readonly','any version') };
 eval { $v .= pmver('Test::More','0.88') };
 eval { $v .= pmver('Text::Wrap','any version') };
+eval { $v .= pmver('base','any version') };
+eval { $v .= pmver('strict','any version') };
+eval { $v .= pmver('warnings','any version') };
 
 
 
