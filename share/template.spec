@@ -8,7 +8,7 @@ Version:    %perl_convert_version %{upstream_version}
 Release:    %mkrel 1
 
 Summary:    DISTSUMMARY
-License:    GPL+ or Artistic
+License:    GPLv1+ or Artistic
 Group:      Development/Perl
 Url:        http://search.cpan.org/dist/%{upstream_name}
 Source0:    http://www.cpan.org/modules/by-module/DISTTOPLEVEL/%{upstream_name}-%{upstream_version}.DISTEXTENSION
