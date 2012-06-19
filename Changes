@@ -2,6 +2,9 @@ Revision history for CPANPLUS-Dist-Mdv
 
 {{$NEXT}}
 
+1.121710  2012-06-19 16:05:14 Europe/Paris
+ - use rpm macros for all dirs (buchan milne)
+
 1.112710  2011-09-28 10:37:58 Europe/Paris
  - no need to clean %buildroot before install
 
