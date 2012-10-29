@@ -499,7 +499,7 @@ sub _module_description {
         }
     }
 
-    return 'no description found';
+    return '';
 }
 
 
