@@ -1,0 +1,135 @@
+# NAME
+
+CPANPLUS::Dist::Mageia - a cpanplus backend to build mageia rpms
+
+# VERSION
+
+version 2.000
+
+# DESCRIPTION
+
+CPANPLUS::Dist::Mageia is a distribution class to create mageia packages
+from CPAN modules, and all its dependencies. This allows you to have
+the most recent copies of CPAN modules installed, using your package
+manager of choice, but without having to wait for central repositories
+to be updated.
+
+You can either install them using the API provided in this package, or
+manually via rpm.
+
+Some of the bleading edge CPAN modules have already been turned into
+mageia packages for you, and you can make use of them by adding the
+cooker repositories (main & contrib).
+
+Note that these packages are built automatically from CPAN and are
+assumed to have the same license as perl and come without support.
+Please always refer to the original CPAN package if you have questions.
+
+# METHODS
+
+## my $bool = CPANPLUS::Dist::Mageia->format\_available;
+
+Return a boolean indicating whether or not you can use this package to
+create and install modules in your environment.
+
+It will verify if you are on a mageia system, and if you have all the
+necessary components avialable to build your own mageia packages. You
+will need at least these dependencies installed: `rpm`, `rpmbuild` and
+`gcc`.
+
+## my $bool = $mga->init;
+
+Sets up the `CPANPLUS::Dist::Mageia` object for use. Effectively creates
+all the needed status accessors.
+
+Called automatically whenever you create a new `CPANPLUS::Dist` object.
+
+## my $bool = $mga->prepare;
+
+Prepares a distribution for creation. This means it will create the rpm
+spec file needed to build the rpm and source rpm. This will also satisfy
+any prerequisites the module may have.
+
+Note that the spec file will be as accurate as possible. However, some
+fields may wrong (especially the description, and maybe the summary)
+since it relies on pod parsing to find those information.
+
+Returns true on success and false on failure.
+
+You may then call `$mga->create` on the object to create the rpm
+from the spec file, and then `$mga->install` on the object to
+actually install it.
+
+## my $bool = $mga->create;
+
+Builds the rpm file from the spec file created during the `create()`
+step.
+
+Returns true on success and false on failure.
+
+You may then call `$mga->install` on the object to actually install it.
+
+## my $bool = $mga->install;
+
+Installs the rpm using `rpm -U`. If run as a non-root user, uses
+`sudo`. This assumes that current user has sudo rights (without
+password for max efficiency) to run `rpm`.
+
+Returns true on success and false on failure
+
+# SYNOPSYS
+
+    $ cpan2dist --format=CPANPLUS::Dist::Mageia Some::Random::Package
+
+# TODO
+
+## Scan for proper license
+
+Right now we assume that the license of every module is `the same
+as perl itself`. Although correct in almost all cases, it should 
+really be probed rather than assumed.
+
+## Long description
+
+Right now we provided the description as given by the module in it's
+meta data. However, not all modules provide this meta data and rather
+than scanning the files in the package for it, we simply default to the
+name of the module.
+
+# SEE ALSO
+
+[CPANPLUS::Backend](http://search.cpan.org/perldoc?CPANPLUS::Backend), [CPANPLUS::Module](http://search.cpan.org/perldoc?CPANPLUS::Module), [CPANPLUS::Dist](http://search.cpan.org/perldoc?CPANPLUS::Dist),
+`cpan2dist`, `rpm`, `urpmi`
+
+You can look for information on this module at:
+
+- Search CPAN
+
+[http://search.cpan.org/dist/CPANPLUS-Dist-Mageia](http://search.cpan.org/dist/CPANPLUS-Dist-Mageia)
+
+- See open / report bugs
+
+[http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPANPLUS-Dist-Mageia](http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPANPLUS-Dist-Mageia)
+
+- Git repository
+
+[http://github.com/jquelin/cpanplus-dist-mageia](http://github.com/jquelin/cpanplus-dist-mageia)
+
+- AnnoCPAN: Annotated CPAN documentation
+
+[http://annocpan.org/dist/CPANPLUS-Dist-Mageia](http://annocpan.org/dist/CPANPLUS-Dist-Mageia)
+
+- CPAN Ratings
+
+[http://cpanratings.perl.org/d/CPANPLUS-Dist-Mageia](http://cpanratings.perl.org/d/CPANPLUS-Dist-Mageia)
+
+# AUTHOR
+
+Jerome Quelin
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Jerome Quelin.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
