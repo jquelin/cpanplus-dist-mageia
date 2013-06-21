@@ -153,6 +153,9 @@ sub prepare {
         $distinstall = "%makeinstall_std";
     } else {
         # module::build only distribution
+        # The double dashes ("--") are for Module::Build::Tiny compatibility:
+        #   * https://rt.cpan.org/Ticket/Display.html?id=86240
+        #   * https://wiki.mageia.org/en/Perl_policy
         push @reqs, 'Module::Build';
         $distbuild = "%{__perl} Build.PL --installdirs=vendor\n";
         $distmaker = "./Build";
