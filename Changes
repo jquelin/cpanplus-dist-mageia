@@ -2,6 +2,10 @@ Revision history for CPANPLUS-Dist-Mdv
 
 {{$NEXT}}
 
+2.100401  2014-09-30 14:52:08+02:00 Europe/Paris
+ - adding %{?perl_default_filter} (rpm 4.12)
+ - using --options for Build.PL
+
 2.000     2012-10-29 14:17:10 Europe/Paris
  - insert an empty description instead of "no description found" to make
    sure rpmlint catches the error

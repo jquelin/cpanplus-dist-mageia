@@ -4,7 +4,7 @@ CPANPLUS::Dist::Mageia - a cpanplus backend to build mageia rpms
 
 # VERSION
 
-version 2.000
+version 2.100401
 
 # DESCRIPTION
 
@@ -98,30 +98,30 @@ name of the module.
 
 # SEE ALSO
 
-[CPANPLUS::Backend](http://search.cpan.org/perldoc?CPANPLUS::Backend), [CPANPLUS::Module](http://search.cpan.org/perldoc?CPANPLUS::Module), [CPANPLUS::Dist](http://search.cpan.org/perldoc?CPANPLUS::Dist),
+[CPANPLUS::Backend](https://metacpan.org/pod/CPANPLUS::Backend), [CPANPLUS::Module](https://metacpan.org/pod/CPANPLUS::Module), [CPANPLUS::Dist](https://metacpan.org/pod/CPANPLUS::Dist),
 `cpan2dist`, `rpm`, `urpmi`
 
 You can look for information on this module at:
 
 - Search CPAN
 
-[http://search.cpan.org/dist/CPANPLUS-Dist-Mageia](http://search.cpan.org/dist/CPANPLUS-Dist-Mageia)
+    [http://search.cpan.org/dist/CPANPLUS-Dist-Mageia](http://search.cpan.org/dist/CPANPLUS-Dist-Mageia)
 
 - See open / report bugs
 
-[http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPANPLUS-Dist-Mageia](http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPANPLUS-Dist-Mageia)
+    [http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPANPLUS-Dist-Mageia](http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPANPLUS-Dist-Mageia)
 
 - Git repository
 
-[http://github.com/jquelin/cpanplus-dist-mageia](http://github.com/jquelin/cpanplus-dist-mageia)
+    [http://github.com/jquelin/cpanplus-dist-mageia](http://github.com/jquelin/cpanplus-dist-mageia)
 
 - AnnoCPAN: Annotated CPAN documentation
 
-[http://annocpan.org/dist/CPANPLUS-Dist-Mageia](http://annocpan.org/dist/CPANPLUS-Dist-Mageia)
+    [http://annocpan.org/dist/CPANPLUS-Dist-Mageia](http://annocpan.org/dist/CPANPLUS-Dist-Mageia)
 
 - CPAN Ratings
 
-[http://cpanratings.perl.org/d/CPANPLUS-Dist-Mageia](http://cpanratings.perl.org/d/CPANPLUS-Dist-Mageia)
+    [http://cpanratings.perl.org/d/CPANPLUS-Dist-Mageia](http://cpanratings.perl.org/d/CPANPLUS-Dist-Mageia)
 
 # AUTHOR
 
