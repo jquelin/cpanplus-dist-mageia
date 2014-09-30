@@ -1,6 +1,8 @@
 %define upstream_name    DISTNAME
 %define upstream_version DISTVERS
 
+%{?perl_default_filter}
+
 Name:       perl-%{upstream_name}
 Version:    %perl_convert_version %{upstream_version}
 Release:    %mkrel 1
