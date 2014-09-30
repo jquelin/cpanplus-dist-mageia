@@ -154,9 +154,9 @@ sub prepare {
     } else {
         # module::build only distribution
         push @reqs, 'Module::Build';
-        $distbuild = "%{__perl} Build.PL installdirs=vendor\n";
+        $distbuild = "%{__perl} Build.PL --installdirs=vendor\n";
         $distmaker = "./Build";
-        $distinstall = "./Build install destdir=%{buildroot}";
+        $distinstall = "./Build install --destdir=%{buildroot}";
     }
     my $distbreqs      = join "\n", map { "BuildRequires: perl($_)" } 
                          grep { $_ ne "perl" } @reqs;
