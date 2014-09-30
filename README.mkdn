@@ -4,7 +4,7 @@ CPANPLUS::Dist::Mageia - a cpanplus backend to build mageia rpms
 
 # VERSION
 
-version 2.100401
+version 2.101
 
 # DESCRIPTION
 
