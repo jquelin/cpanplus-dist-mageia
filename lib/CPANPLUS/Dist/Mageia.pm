@@ -617,9 +617,9 @@ You can look for information on this module at:
 
 =over 4
 
-=item * Search CPAN
+=item * MetaCPAN
 
-L<http://search.cpan.org/dist/CPANPLUS-Dist-Mageia>
+L<http://metacpan.org/release/CPANPLUS-Dist-Mageia>
 
 =item * See open / report bugs
 
