@@ -83,7 +83,7 @@ sub init {
     my $status = $self->status; # an Object::Accessor
     # distname: Foo-Bar
     # distvers: 1.23
-    # extra_files: qw[ /bin/foo /usr/bin/bar ] 
+    # extra_files: qw[ /bin/foo /usr/bin/bar ]
     # rpmname:  perl-Foo-Bar
     # rpmpath:  $RPMDIR/RPMS/noarch/perl-Foo-Bar-1.23-1mga2008.0.noarch.rpm
     # rpmvers:  1
@@ -161,7 +161,7 @@ sub prepare {
         $distmaker = "./Build";
         $distinstall = "./Build install --destdir=%{buildroot}";
     }
-    my $distbreqs      = join "\n", map { "BuildRequires: perl($_)" } 
+    my $distbreqs      = join "\n", map { "BuildRequires: perl($_)" }
                          grep { $_ ne "perl" } @reqs;
     my @docfiles =
         uniq
@@ -406,7 +406,7 @@ sub install {
 # my $bool = $self->_has_been_build;
 #
 # return true if there's already a package build for this module.
-# 
+#
 sub _has_been_build {
     my ($self, $name, $vers) = @_;
     my $pkg = ( sort glob "$RPMDIR{rpm}/*/$name-$vers-*.rpm" )[-1];
@@ -594,7 +594,7 @@ Please always refer to the original CPAN package if you have questions.
 =head2 Scan for proper license
 
 Right now we assume that the license of every module is C<the same
-as perl itself>. Although correct in almost all cases, it should 
+as perl itself>. Although correct in almost all cases, it should
 really be probed rather than assumed.
 
 
