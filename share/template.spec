@@ -10,7 +10,7 @@ Release:    %mkrel 1
 Summary:    DISTSUMMARY
 License:    GPLv1+ or Artistic
 Group:      Development/Perl
-Url:        http://search.cpan.org/dist/%{upstream_name}
+Url:        http://metacpan.org/release/%{upstream_name}
 Source0:    http://www.cpan.org/modules/by-module/DISTTOPLEVEL/%{upstream_name}-%{upstream_version}.DISTEXTENSION
 
 DISTBUILDREQUIRES
