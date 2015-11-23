@@ -4,7 +4,7 @@ CPANPLUS::Dist::Mageia - a cpanplus backend to build mageia rpms
 
 # VERSION
 
-version 2.101
+version 2.102
 
 # DESCRIPTION
 
@@ -86,7 +86,7 @@ Returns true on success and false on failure
 ## Scan for proper license
 
 Right now we assume that the license of every module is `the same
-as perl itself`. Although correct in almost all cases, it should 
+as perl itself`. Although correct in almost all cases, it should
 really be probed rather than assumed.
 
 ## Long description
@@ -103,9 +103,9 @@ name of the module.
 
 You can look for information on this module at:
 
-- Search CPAN
+- MetaCPAN
 
-    [http://search.cpan.org/dist/CPANPLUS-Dist-Mageia](http://search.cpan.org/dist/CPANPLUS-Dist-Mageia)
+    [http://metacpan.org/release/CPANPLUS-Dist-Mageia](http://metacpan.org/release/CPANPLUS-Dist-Mageia)
 
 - See open / report bugs
 
