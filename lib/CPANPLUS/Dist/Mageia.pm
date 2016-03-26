@@ -150,7 +150,7 @@ sub prepare {
         push @reqs, 'Module::Build::Compat' if _is_module_build_compat($module);
         $distbuild = "%{__perl} Makefile.PL INSTALLDIRS=vendor\n";
         $distmaker = "%make";
-        $distinstall = "%makeinstall_std";
+        $distinstall = "%make_install";
     } else {
         # module::build only distribution
         # The double dashes ("--") are for Module::Build::Tiny compatibility:
