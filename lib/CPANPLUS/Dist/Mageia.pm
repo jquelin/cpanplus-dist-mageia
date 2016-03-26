@@ -561,7 +561,7 @@ sub _module_summary {
 __END__
 
 
-=head1 SYNOPSYS
+=head1 SYNOPSIS
 
     $ cpan2dist --format=CPANPLUS::Dist::Mageia Some::Random::Package
 

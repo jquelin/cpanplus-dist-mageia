@@ -6,6 +6,10 @@ CPANPLUS::Dist::Mageia - A CPANPLUS backend to build Mageia RPMs
 
 version 2.103
 
+# SYNOPSIS
+
+    $ cpan2dist --format=CPANPLUS::Dist::Mageia Some::Random::Package
+
 # DESCRIPTION
 
 CPANPLUS::Dist::Mageia is a distribution class to create Mageia packages
@@ -76,10 +80,6 @@ Installs the RPM using `rpm -U`. If run as a non-root user, uses
 password for max efficiency) to run `rpm`.
 
 Returns true on success and false on failure
-
-# SYNOPSYS
-
-    $ cpan2dist --format=CPANPLUS::Dist::Mageia Some::Random::Package
 
 # TODO
 
