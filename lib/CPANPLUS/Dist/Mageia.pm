@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package CPANPLUS::Dist::Mageia;
-# ABSTRACT: a cpanplus backend to build mageia rpms
+# ABSTRACT: A CPANPLUS backend to build Mageia RPMs
 
 use base 'CPANPLUS::Dist::Base';
 
@@ -32,8 +32,8 @@ my %RPMDIR =  map {do { chomp(my $d=qx[ rpm --eval %_${_}dir ]); $_, $d; }} @RPM
 Return a boolean indicating whether or not you can use this package to
 create and install modules in your environment.
 
-It will verify if you are on a mageia system, and if you have all the
-necessary components avialable to build your own mageia packages. You
+It will verify if you are on a Mageia system, and if you have all the
+necessary components avialable to build your own Mageia packages. You
 will need at least these dependencies installed: C<rpm>, C<rpmbuild> and
 C<gcc>.
 
@@ -98,17 +98,17 @@ sub init {
 
 =method my $bool = $mga->prepare;
 
-Prepares a distribution for creation. This means it will create the rpm
-spec file needed to build the rpm and source rpm. This will also satisfy
+Prepares a distribution for creation. This means it will create the RPM
+C<.spec> file needed to build the RPM and source RPM. This will also satisfy
 any prerequisites the module may have.
 
-Note that the spec file will be as accurate as possible. However, some
-fields may wrong (especially the description, and maybe the summary)
-since it relies on pod parsing to find those information.
+Note that the .spec file will be as accurate as possible. However, some
+fields may be wrong (especially the description, and maybe the summary)
+since it relies on parsing POD to find this information.
 
 Returns true on success and false on failure.
 
-You may then call C<< $mga->create >> on the object to create the rpm
+You may then call C<< $mga->create >> on the object to create the RPM
 from the spec file, and then C<< $mga->install >> on the object to
 actually install it.
 
@@ -256,7 +256,7 @@ sub prepare {
 
 =method my $bool = $mga->create;
 
-Builds the rpm file from the spec file created during the C<create()>
+Builds the RPM file from the spec file created during the C<create()>
 step.
 
 Returns true on success and false on failure.
@@ -351,7 +351,7 @@ sub create {
 
 =method my $bool = $mga->install;
 
-Installs the rpm using C<rpm -U>. If run as a non-root user, uses
+Installs the RPM using C<rpm -U>. If run as a non-root user, uses
 C<sudo>. This assumes that current user has sudo rights (without
 password for max efficiency) to run C<rpm>.
 
@@ -569,18 +569,18 @@ __END__
 
 =head1 DESCRIPTION
 
-CPANPLUS::Dist::Mageia is a distribution class to create mageia packages
-from CPAN modules, and all its dependencies. This allows you to have
+CPANPLUS::Dist::Mageia is a distribution class to create Mageia packages
+from CPAN modules, and all of their dependencies. This allows you to have
 the most recent copies of CPAN modules installed, using your package
 manager of choice, but without having to wait for central repositories
 to be updated.
 
 You can either install them using the API provided in this package, or
-manually via rpm.
+manually via the C<rpm> command.
 
 Some of the bleading edge CPAN modules have already been turned into
-mageia packages for you, and you can make use of them by adding the
-cooker repositories (main & contrib).
+Mageia packages for you, and you can make use of them by adding the
+Cauldron repositories (“core/release”).
 
 Note that these packages are built automatically from CPAN and are
 assumed to have the same license as perl and come without support.
@@ -600,8 +600,8 @@ really be probed rather than assumed.
 
 =head2 Long description
 
-Right now we provided the description as given by the module in it's
-meta data. However, not all modules provide this meta data and rather
+Right now we provide the description as given by the module in its
+meta-data. However, not all modules provide this meta-data and rather
 than scanning the files in the package for it, we simply default to the
 name of the module.
 
