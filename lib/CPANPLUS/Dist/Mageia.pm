@@ -143,7 +143,11 @@ sub prepare {
     my $distdescr      = _module_description($module);
     #my $distlicense    =
     my ($disttoplevel) = $module->name=~ /([^:]+)::/;
-    my @reqs           = sort keys %{ $module->status->prereqs };
+    my @reqs           = sort { $a cmp $b} (
+        keys(%{ $module->status->prereqs }),
+        keys(%{ $module->find_configure_requires }),
+    );
+
 
     my ($distbuild, $distmaker, $distinstall);
     if (-e _path_to_makefile_pl($module)) {
