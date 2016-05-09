@@ -145,7 +145,7 @@ sub prepare {
     my ($disttoplevel) = $module->name=~ /([^:]+)::/;
     my @reqs           = sort { $a cmp $b} (
         keys(%{ $module->status->prereqs }),
-        keys(%{ $module->find_configure_requires }),
+        keys(%{ $self->find_configure_requires }),
     );
 
 
