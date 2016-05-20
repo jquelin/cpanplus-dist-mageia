@@ -2,6 +2,11 @@ Revision history for CPANPLUS-Dist-Mdv
 
 {{$NEXT}}
 
+2.103     2016-05-20 14:13:04+02:00 Europe/Paris
+ - include configure requires (shlomif)
+ - use %make_install instead of %makeinstall (shlomif)
+ - typo fix (shlomif)
+
 2.102     2015-11-23 14:53:20+01:00 Europe/Paris
  - more standard license (shlomif)
  - switching to metacpan (shlomif)
